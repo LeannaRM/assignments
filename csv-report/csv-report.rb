@@ -7,34 +7,34 @@ require 'csv'
 #CSV.foreach("accounts.csv", {headers: true, return_headers: false}) do |row|
 #    puts row["Inflow"].inspect
 #end
-categoryHashPriya = Hash.new
+hashPriya = Hash.new
 
 CSV.foreach("accounts.csv", {headers: true, return_headers: false}) do |row|
     if row["Account"] == "Priya"
 		#puts row.inspect
 		
-		#money = row[Inflow] - row[Outflow]
-		#money = "$5000.00" - "$0.00"
 		outflow = row["Outflow"].delete ","
 		inflow = row["Inflow"].delete ","
 		outflow = outflow.delete "$"
 		inflow = inflow.delete "$"
 
-		puts "\n"
-		puts outflow
-		puts inflow
+		moneyarray = Array.new
+		moneyarray << inflow.to_f - outflow.to_f
+		#print row["Category"]
+		#print hashPriya.has_key?(row["Category"])
 
-		print money = inflow.to_f - outflow.to_f
-		#print \n
+		if hashPriya.has_key?(row["Category"]) == true
+			newarray = hashPriya[row["Category"]].concat(moneyarray)
+			hashPriya[row["Category"]] = newarray
 
+		else
 
-		#categoryHashPriya[row["Category"]] = money
-
-		#puts row["Outflow"].to_I.sum
+			hashPriya[row["Category"]] = moneyarray
+		end
 	end
 end
 
-
+print hashPriya
 
 CSV.foreach("accounts.csv", {headers: true, return_headers: false}) do |row|
     if row["Account"] == "Sonia\n"
@@ -45,4 +45,10 @@ CSV.foreach("accounts.csv", {headers: true, return_headers: false}) do |row|
 	end
 	#puts row["Outflow"].delete "$"
 	#puts row["Inflow"].delete "$"
+end
+
+def collectCategory(myCategory)
+	if row["Category"] == myCategory
+
+	end
 end
