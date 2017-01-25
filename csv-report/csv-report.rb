@@ -1,12 +1,7 @@
 require 'csv'
 
-#CSV.foreach("./accounts.csv", {headers: true, return_headers: false}) do |row|
-#    puts row.inspect
-#end
+require 'pry'
 
-#CSV.foreach("accounts.csv", {headers: true, return_headers: false}) do |row|
-#    puts row["Inflow"].inspect
-#end
 hashPriya = Hash.new
 
 CSV.foreach("accounts.csv", {headers: true, return_headers: false}) do |row|
@@ -20,21 +15,25 @@ CSV.foreach("accounts.csv", {headers: true, return_headers: false}) do |row|
 
 		moneyarray = Array.new
 		moneyarray << inflow.to_f - outflow.to_f
-		#print row["Category"]
-		#print hashPriya.has_key?(row["Category"])
 
 		if hashPriya.has_key?(row["Category"]) == true
 			newarray = hashPriya[row["Category"]].concat(moneyarray)
 			hashPriya[row["Category"]] = newarray
-
 		else
-
 			hashPriya[row["Category"]] = moneyarray
 		end
+
+
 	end
 end
 
-print hashPriya
+#hashPriya[0]
+#hashPriya["Allowance"]
+categoryTotal = []
+hashPriyaTest = hashPriya.each_value{|value|categoryTotal << value.sum}
+
+binding.pry
+
 
 CSV.foreach("accounts.csv", {headers: true, return_headers: false}) do |row|
     if row["Account"] == "Sonia\n"
