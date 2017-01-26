@@ -71,7 +71,7 @@ def createSpacing(categorysumaverage)
 	return hashWithSpacing
 end
 
-def display(categorysumaverage, inputName, balance)
+def displayOnScreen(categorysumaverage, inputName, balance)
 	puts "============================================================\n"
 	puts "Account: " + inputName + "... Balance: $" + balance + "\n"
 	puts "============================================================\n"
@@ -97,8 +97,29 @@ def createReportOnScreen(inputName)
 
 	categorysumaverage = createSpacing(categorysumaverage)
 
-	display(categorysumaverage, inputName, balance)
+	displayOnScreen(categorysumaverage, inputName, balance)
 	return
+end
+
+def displayHTML(categorysumaverage, inputName, balance)
+	puts "<h1>" + inputName + "</h1>"
+	puts "<p>Total Balance: $" + balance + "</p>"
+	puts "<hr>"
+	puts "<table>"
+	puts "\t<tr>"
+	puts "\t\t<td>Category</td>"
+	puts "\t\t<td>Total Spent</td>"
+	puts "\t\t<td>Average Transaction</td>"
+	puts "\t</tr>"
+
+	categorysumaverage.each do |key, value| 
+		puts "\t<tr>"
+		puts "\t\t<td>" + key + "</td>"
+		puts "\t\t<td>" + value[0].to_s + "</td>"
+		puts "\t\t<td>" + value[1].to_s + "</td>"
+		puts "\t</tr>"
+	end
+	puts "</table>"
 end
 
 def createReportHTML(inputName)
@@ -107,17 +128,32 @@ def createReportHTML(inputName)
 
 	categorysumaverage = calculateSumAverage(hashStandardizedData2)
 
-	balance = 0
-	categorysumaverage.each_value{|value| balance+=value[0]}
+	balance = calculateBalance(categorysumaverage)
 
+	displayHTML(categorysumaverage, inputName, balance)
 
-
-
-
-
+	return
 end
 
+def outputCSV(categorysumaverage, inputName, balance)
+	open('myfile.csv', 'w') { |f|
+  		f.puts ""
+	}
+	return 
+end
 
+def createReportCSV(inputName)
+
+	hashStandardizedData2 = csvToHash(inputName)
+
+	categorysumaverage = calculateSumAverage(hashStandardizedData2)
+
+	balance = calculateBalance(categorysumaverage)
+
+	outputCSV(categorysumaverage, inputName, balance)
+
+	return
+end
 
 inputNames = ARGV
 
@@ -125,7 +161,11 @@ k = 0
 
 while k < inputNames.length 
 
-	createReportOnScreen(inputNames[k])
+	#createReportOnScreen(inputNames[k])
+
+	#createReportHTML(inputNames[k])
+
+	createReportCSV(inputNames[k])
 
 	k += 1
 end
