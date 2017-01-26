@@ -20,11 +20,10 @@ def csvToHash(accountName)
 
 	    if row["Account"] == accountName
 			
-			# TODO These 4 lines can become 2. Look into regular expressions.
-			outflow = row["Outflow"].delete ","
-			inflow = row["Inflow"].delete ","
-			outflow = outflow.delete "$"
-			inflow = inflow.delete "$"
+
+			outflow = row["Outflow"].delete(",").delete("$")
+			inflow = row["Inflow"].delete(",").delete("$")
+
 
 			moneyarray = Array.new
 			moneyarray << inflow.to_f - outflow.to_f
@@ -49,48 +48,37 @@ while k < inputNames.length
 
 	hashStandardizedData2 = csvToHash(inputNames[k])
 
-	categoryTotal = []
-	category = []
-	# category = {} # Or Hash.new
-	# {
-	# 	"Entertainment" => {"sum" => 200, "average" => 23},
-	# 	"Utilities" => {"sum" => 220, "average" => 20}
-	# }
-	categoryAverage =[]
+	balance = 0
+	categorysumaverage = {}
 
-	# { and } can be replaced with do and end.
-	# hashStandardizedData2.each {|key, value| category[key] = value.sum }
 
-	hashStandardizedData2.each_value{|value|categoryTotal << value.sum}
-	hashStandardizedData2.each_key{|key|category << key}
-	hashStandardizedData2.each_value{|value|categoryAverage << value.sum/value.length}
+	hashStandardizedData2.each do |key, value|
+		categorysumaverage[key] = [value.sum.round(2), (value.sum/value.length).round(2)]
+		balance +=value.sum
+	end
+	
 
-	# TODO Integrate these operations into one loop above.
-	categoryTotal.map! {|x| x.round(2)}
-	categoryAverage.map! {|x| x.round(2)}
-
-	balance = categoryTotal.sum
-
-	categoryTotal.map! {|x| x.to_s}
+	#categorysumaverage.map! {|x| x.to_s}
 
 
 
 
 	############### DISPLAY
 	puts "============================================================\n"
-	puts "Account: " + inputNames[k] + "... Balance: $" + balance.to_s + "\n"
+	puts "Account: " + inputNames[k] + "... Balance: $" + balance.round(2).to_s + "\n"
 	puts "============================================================\n"
+	
 	i = 0
-
-	longestCategoryLength = category.max_by{|x| x.length}.length
-	longestTotallength = categoryTotal.max_by{|x| x.length}.length
+	longestCategoryLength = categorysumaverage.keys.max_by{|x| x.length}.length
+	binding.pry			
+	longestTotallength = categorysumaverage.values.transpose[0].max_by{|x| x.to_s.length}.to_s.length
 
 	puts "Category" + "\t\t|" + "Total Spent" + "\t|" + "Average Transaction"
 
 	puts "------------------------|---------------|----------------"
 
 
-	while i < category.length do
+	while i < categorysumaverage.keys.length do
 		while category[i].length < longestCategoryLength
 			category[i] = category[i] + " "
 		end
@@ -103,12 +91,6 @@ while k < inputNames.length
 	end
 	k += 1
 end
-
-
-
-
-
-
 
 
 
