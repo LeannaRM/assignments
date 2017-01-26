@@ -57,7 +57,23 @@ def calculateSumAverage(hashStandardizedData2)
 	return categorysumaverage
 end
 
-
+def createSpacing(categorysumaverage)
+	longestCategoryLength = categorysumaverage.keys.max_by{|x| x.length}.length	
+	longestTotallength = categorysumaverage.values.transpose[0].max_by{|x| x.to_s.length}.to_s.length
+	#hashWithSpacing = {}
+	categorysumaverage.each do |key, value|
+		while key.length < longestCategoryLength
+			key = key + " "
+			#binding.pry
+		end
+		while value[0].to_s.length < longestTotallength
+			value[0] = value[0].to_s + " "
+		end
+	binding.pry
+	end
+	
+	return categorysumaverage
+end
 
 k = 0
 
@@ -72,28 +88,18 @@ while k < inputNames.length
 	
 
 	############### DISPLAY
+
+	categorysumaverage = createSpacing(categorysumaverage)
+
+
 	puts "============================================================\n"
 	puts "Account: " + inputNames[k] + "... Balance: $" + balance.round(2).to_s + "\n"
 	puts "============================================================\n"
-	
-	i = 0
-	longestCategoryLength = categorysumaverage.keys.max_by{|x| x.length}.length
-		
-	longestTotallength = categorysumaverage.values.transpose[0].max_by{|x| x.to_s.length}.to_s.length
-
 	puts "Category" + "\t\t|" + "Total Spent" + "\t|" + "Average Transaction"
-
 	puts "------------------------|---------------|----------------"
+	categorysumaverage.each{|key, value| puts key + "\t\t|" + value[0].to_s + "\t|" + value[1].to_s}
 
-	categorysumaverage.each do |key, value|
-		while key.length < longestCategoryLength
-			key = key + " "
-		end
-		while value[0].to_s.length < longestTotallength
-			value[0] = value[0].to_s + " "
-		end
-		puts key + "\t\t|" + value[0].to_s + "\t|" + value[1].to_s
-	end
+
 
 	k += 1
 end
