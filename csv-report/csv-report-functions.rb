@@ -44,6 +44,7 @@ def csvToHash(accountName)
 end
 
 k = 0
+
 while k < inputNames.length 
 
 	hashStandardizedData2 = csvToHash(inputNames[k])
@@ -58,9 +59,6 @@ while k < inputNames.length
 	end
 	
 
-	#categorysumaverage.map! {|x| x.to_s}
-
-
 
 
 	############### DISPLAY
@@ -70,25 +68,24 @@ while k < inputNames.length
 	
 	i = 0
 	longestCategoryLength = categorysumaverage.keys.max_by{|x| x.length}.length
-	binding.pry			
+		
 	longestTotallength = categorysumaverage.values.transpose[0].max_by{|x| x.to_s.length}.to_s.length
 
 	puts "Category" + "\t\t|" + "Total Spent" + "\t|" + "Average Transaction"
 
 	puts "------------------------|---------------|----------------"
 
-
-	while i < categorysumaverage.keys.length do
-		while category[i].length < longestCategoryLength
-			category[i] = category[i] + " "
+	categorysumaverage.each do |key, value|
+		while key.length < longestCategoryLength
+			key = key + " "
 		end
-		while categoryTotal[i].length < longestTotallength
-			categoryTotal[i] = categoryTotal[i] + " "
+		while value[0].to_s.length < longestTotallength
+			value[0] = value[0].to_s + " "
 		end
-
-		puts category[i].to_s + "\t\t|" + categoryTotal[i] + "\t|" + categoryAverage[i].to_s
-		i += 1
+		puts key + "\t\t|" + value[0].to_s + "\t|" + value[1].to_s
 	end
+binding.pry
+
 	k += 1
 end
 
