@@ -17,23 +17,21 @@ def cleanUpAndCalculate(row)
 	outflow = row["Outflow"].delete(",").delete("$")
 	inflow = row["Inflow"].delete(",").delete("$")
 
-	moneyarray = Array.new
-	moneyarray << inflow.to_f - outflow.to_f	
-	return moneyarray
+	# TODO Don't return Array--just the float result.
+	# moneyarray = Array.new
+	# moneyarray << 
+	return inflow.to_f - outflow.to_f	
 end
 
-def fillHash(hashStandardizedData, row, moneyarray)
+def fillHash(hashStandardizedData, row, moneyamount)
 	if hashStandardizedData.has_key?(row["Category"])
-		newarray = hashStandardizedData[row["Category"]].concat(moneyarray)
+		newarray = hashStandardizedData[row["Category"]].push(moneyamount)
 		hashStandardizedData[row["Category"]] = newarray
 	else
-		hashStandardizedData[row["Category"]] = moneyarray
+		hashStandardizedData[row["Category"]] = [moneyamount]
 	end
 	return hashStandardizedData
 end
-
-inputNames = ARGV
-
 
 def csvToHash(accountName)
 	hashStandardizedData = Hash.new
@@ -41,8 +39,8 @@ def csvToHash(accountName)
 	CSV.foreach("accounts.csv", {headers: true, return_headers: false}) do |row|
     	row = take_off_next_line(row)
 	    if row["Account"] == accountName
-			moneyarray = cleanUpAndCalculate(row)
-			hashStandardizedData = fillHash(hashStandardizedData, row, moneyarray)
+			moneyamount = cleanUpAndCalculate(row)
+			hashStandardizedData = fillHash(hashStandardizedData, row, moneyamount)
 		end
 	end
 	return hashStandardizedData
@@ -60,46 +58,74 @@ end
 def createSpacing(categorysumaverage)
 	longestCategoryLength = categorysumaverage.keys.max_by{|x| x.length}.length	
 	longestTotallength = categorysumaverage.values.transpose[0].max_by{|x| x.to_s.length}.to_s.length
-	#hashWithSpacing = {}
+	hashWithSpacing = {}
 	categorysumaverage.each do |key, value|
 		while key.length < longestCategoryLength
 			key = key + " "
-			#binding.pry
 		end
 		while value[0].to_s.length < longestTotallength
 			value[0] = value[0].to_s + " "
 		end
-	binding.pry
+		hashWithSpacing[key] = value
 	end
-	
-	return categorysumaverage
+	return hashWithSpacing
 end
 
-k = 0
+def display(categorysumaverage, inputName, balance)
+	puts "============================================================\n"
+	puts "Account: " + inputName + "... Balance: $" + balance + "\n"
+	puts "============================================================\n"
+	puts "Category" + "\t\t|" + "Total Spent" + "\t|" + "Average Transaction"
+	puts "------------------------|---------------|----------------"
+	categorysumaverage.each{|key, value| puts key + "\t\t|" + value[0].to_s + "\t|" + value[1].to_s}
+	return
+end
 
-while k < inputNames.length 
+def calculateBalance(categorysumaverage)
+	balance = 0
+	categorysumaverage.each_value{|value| balance+=value[0]}
+	balance = balance.round(2).to_s
+	return balance
+end
 
-	hashStandardizedData2 = csvToHash(inputNames[k])
+def createReportOnScreen(inputName)
+	hashStandardizedData2 = csvToHash(inputName)
+
+	categorysumaverage = calculateSumAverage(hashStandardizedData2)
+
+	balance = calculateBalance(categorysumaverage)
+
+	categorysumaverage = createSpacing(categorysumaverage)
+
+	display(categorysumaverage, inputName, balance)
+	return
+end
+
+def createReportHTML(inputName)
+
+	hashStandardizedData2 = csvToHash(inputName)
 
 	categorysumaverage = calculateSumAverage(hashStandardizedData2)
 
 	balance = 0
 	categorysumaverage.each_value{|value| balance+=value[0]}
-	
-
-	############### DISPLAY
-
-	categorysumaverage = createSpacing(categorysumaverage)
 
 
-	puts "============================================================\n"
-	puts "Account: " + inputNames[k] + "... Balance: $" + balance.round(2).to_s + "\n"
-	puts "============================================================\n"
-	puts "Category" + "\t\t|" + "Total Spent" + "\t|" + "Average Transaction"
-	puts "------------------------|---------------|----------------"
-	categorysumaverage.each{|key, value| puts key + "\t\t|" + value[0].to_s + "\t|" + value[1].to_s}
 
 
+
+
+end
+
+
+
+inputNames = ARGV
+
+k = 0
+
+while k < inputNames.length 
+
+	createReportOnScreen(inputNames[k])
 
 	k += 1
 end
