@@ -2,23 +2,36 @@ require 'csv'
 
 require 'pry'
 
-def take_off_next_line(row)
-	if row["Account"] == "Sonia\n"
-		row["Account"] = "Sonia"
+class CsvRow 
+
+	def set_initial_values(row)
+		 #@Account = {}
+		 @row = row
 	end
-	if row["Category"] == "Groceries\n"
-		row["Category"] = "Groceries"
+
+	def take_off_next_line(subsection)
+		@row[subsection] = @row[subsection].chomp
 	end
-	return row
+
+	def setvalueOut(row)
+		@outflow = row["Outflow"].delete(",").delete("$").to_f
+	end
+
+	def setvalueIn(row)
+		@inflow = row["Inflow"].delete(",").delete("$").to_f
+	end
+
+	def calculatesum
+		@sum = @inflow - @outflow
+		return @sum
+	end
 end
 
-
-def cleanUpAndCalculate(row)
-	outflow = row["Outflow"].delete(",").delete("$")
-	inflow = row["Inflow"].delete(",").delete("$")
-	return inflow.to_f - outflow.to_f	
-end
-
+	# def cleanUpAndCalculate
+	# 	outflow = row["Outflow"].delete(",").delete("$")
+	# 	inflow = row["Inflow"].delete(",").delete("$")
+	# 	return inflow.to_f - outflow.to_f	
+	# end
 
 
 def fillHash(hashStandardizedData, row, moneyamount)
@@ -31,16 +44,23 @@ def fillHash(hashStandardizedData, row, moneyamount)
 	return hashStandardizedData
 end
 
+
 def csvToHash(accountName)
 	hashStandardizedData = Hash.new
-
 	CSV.foreach("accounts.csv", {headers: true, return_headers: false}) do |row|
-    	row = take_off_next_line(row)
+    	myrow = CsvRow.new
+    	myrow.set_initial_values(row)
+    	myrow.take_off_next_line("Account")
+    	myrow.take_off_next_line("Category")
+		myrow.setvalueOut(row)
+		myrow.setvalueIn(row)
+		moneyamount = myrow.calculatesum
+
 	    if row["Account"] == accountName
-			moneyamount = cleanUpAndCalculate(row)
-			hashStandardizedData = fillHash(hashStandardizedData, row, moneyamount)
+		 	hashStandardizedData = fillHash(hashStandardizedData, row, moneyamount)
 		end
 	end
+	# binding.pry
 	return hashStandardizedData
 end
 
