@@ -74,27 +74,36 @@ def calculateSumAverage(hashStandardizedData2)
 	return categorysumaverage
 end
 
+class Display
 
-
-
-
-
-
-def createSpacing(categorysumaverage)
-	longestCategoryLength = categorysumaverage.keys.max_by{|x| x.length}.length	
-	longestTotallength = categorysumaverage.values.transpose[0].max_by{|x| x.to_s.length}.to_s.length
-	hashWithSpacing = {}
-	categorysumaverage.each do |key, value|
-		while key.length < longestCategoryLength
-			key = key + " "
-		end
-		while value[0].to_s.length < longestTotallength
-			value[0] = value[0].to_s + " "
-		end
-		hashWithSpacing[key] = value
+	def import_data(categorysumaverage)
+		@categorysumaverage = categorysumaverage
 	end
-	return hashWithSpacing
+
+	def createSpacing(categorysumaverage)
+
+		@longestCategoryLength = @categorysumaverage.keys.max_by{|x| x.length}.length	
+		@longestTotallength = @categorysumaverage.values.transpose[0].max_by{|x| x.to_s.length}.to_s.length
+		@hashWithSpacing = {}
+		@categorysumaverage.each do |key, value|
+			while key.length < @longestCategoryLength
+				key = key + " "
+			end
+			while value[0].to_s.length < @longestTotallength
+				value[0] = value[0].to_s + " "
+			end
+			@hashWithSpacing[key] = value
+		end
+		return @hashWithSpacing
+	end
 end
+
+
+
+
+
+
+
 
 def displayOnScreen(categorysumaverage, inputName, balance)
 	puts "============================================================\n"
@@ -176,7 +185,6 @@ def outputCSV(categorysumaverage, inputName, balance)
 end
 
 
-
 def createReportCSV(inputName)
 
 	hashStandardizedData2 = csvToHash(inputName)
@@ -190,6 +198,7 @@ def createReportCSV(inputName)
 	return
 end
 
+
 inputNames = ARGV
 
 k = 0
@@ -197,7 +206,7 @@ k = 0
 holdingArray = Array.new
 ways = ["csv", "CSV", "HTML", "html"]
 ways.each do |i|
-holdingArray << inputNames.delete(i)
+	holdingArray << inputNames.delete(i)
 end
 
 while k < inputNames.length 
