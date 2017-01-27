@@ -7,6 +7,11 @@ class CsvRow
 	def set_initial_values(row)
 		 #@Account = {}
 		 @row = row
+		 #binding.pry
+		 if @hashStandardizedData == nil
+		 	@hashStandardizedData = Hash.new
+
+		 end
 	end
 
 	def take_off_next_line(subsection)
@@ -25,30 +30,38 @@ class CsvRow
 		@sum = @inflow - @outflow
 		return @sum
 	end
-end
 
-	# def cleanUpAndCalculate
-	# 	outflow = row["Outflow"].delete(",").delete("$")
-	# 	inflow = row["Inflow"].delete(",").delete("$")
-	# 	return inflow.to_f - outflow.to_f	
-	# end
+	def fillHash
+		if @hashStandardizedData.has_key?(@row["Category"])
+			newarray = @hashStandardizedData[@row["Category"]].push(@sum)
+			@hashStandardizedData[@row["Category"]] = newarray
+			#hashStandardizedData[@row["Category"]] = hashStandardizedData[@row["Category"]].push(@sum)
+			#hashStandardizedData[@row["Category"]].push(@sum)
+		else
 
-
-def fillHash(hashStandardizedData, row, moneyamount)
-	if hashStandardizedData.has_key?(row["Category"])
-		newarray = hashStandardizedData[row["Category"]].push(moneyamount)
-		hashStandardizedData[row["Category"]] = newarray
-	else
-		hashStandardizedData[row["Category"]] = [moneyamount]
+			@hashStandardizedData[@row["Category"]] = [@sum]
+		end
+		return @hashStandardizedData
 	end
-	return hashStandardizedData
 end
+
+
+
+# def fillHash(hashStandardizedData, row, moneyamount)
+# 	if hashStandardizedData.has_key?(row["Category"])
+# 		newarray = hashStandardizedData[row["Category"]].push(moneyamount)
+# 		hashStandardizedData[row["Category"]] = newarray
+# 	else
+# 		hashStandardizedData[row["Category"]] = [moneyamount]
+# 	end
+# 	return hashStandardizedData
+# end
 
 
 def csvToHash(accountName)
 	hashStandardizedData = Hash.new
+	myrow = CsvRow.new
 	CSV.foreach("accounts.csv", {headers: true, return_headers: false}) do |row|
-    	myrow = CsvRow.new
     	myrow.set_initial_values(row)
     	myrow.take_off_next_line("Account")
     	myrow.take_off_next_line("Category")
@@ -56,8 +69,11 @@ def csvToHash(accountName)
 		myrow.setvalueIn(row)
 		moneyamount = myrow.calculatesum
 
+
 	    if row["Account"] == accountName
-		 	hashStandardizedData = fillHash(hashStandardizedData, row, moneyamount)
+		 	hashStandardizedData = myrow.fillHash
+		 	#hashStandardizedData = fillHash(hashStandardizedData, row, moneyamount)
+		 	#binding.pry
 		end
 	end
 	# binding.pry
@@ -189,7 +205,7 @@ while k < inputNames.length
 
 	#createReportHTML(inputNames[k])
 
-	createReportCSV(inputNames[k])
+	#createReportCSV(inputNames[k])
 
 	k += 1
 end
