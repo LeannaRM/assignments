@@ -16,10 +16,6 @@ end
 def cleanUpAndCalculate(row)
 	outflow = row["Outflow"].delete(",").delete("$")
 	inflow = row["Inflow"].delete(",").delete("$")
-
-	# TODO Don't return Array--just the float result.
-	# moneyarray = Array.new
-	# moneyarray << 
 	return inflow.to_f - outflow.to_f	
 end
 
@@ -136,8 +132,14 @@ def createReportHTML(inputName)
 end
 
 def outputCSV(categorysumaverage, inputName, balance)
-	open('myfile.csv', 'w') { |f|
-  		f.puts ""
+	
+	filename = inputName + ".csv"
+
+	CSV.open(filename, 'w') { |f|
+  		f.puts  ["Category", "Total Spent", "Average Transaction"]
+  		categorysumaverage.each do |key, value|
+  			f.puts [key, value[0], value[1]]
+  		end
 	}
 	return 
 end
@@ -161,7 +163,7 @@ k = 0
 
 while k < inputNames.length 
 
-	#createReportOnScreen(inputNames[k])
+	createReportOnScreen(inputNames[k])
 
 	#createReportHTML(inputNames[k])
 
