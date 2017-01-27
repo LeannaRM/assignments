@@ -35,27 +35,14 @@ class CsvRow
 		if @hashStandardizedData.has_key?(@row["Category"])
 			newarray = @hashStandardizedData[@row["Category"]].push(@sum)
 			@hashStandardizedData[@row["Category"]] = newarray
-			#hashStandardizedData[@row["Category"]] = hashStandardizedData[@row["Category"]].push(@sum)
-			#hashStandardizedData[@row["Category"]].push(@sum)
 		else
-
 			@hashStandardizedData[@row["Category"]] = [@sum]
 		end
 		return @hashStandardizedData
 	end
+
 end
 
-
-
-# def fillHash(hashStandardizedData, row, moneyamount)
-# 	if hashStandardizedData.has_key?(row["Category"])
-# 		newarray = hashStandardizedData[row["Category"]].push(moneyamount)
-# 		hashStandardizedData[row["Category"]] = newarray
-# 	else
-# 		hashStandardizedData[row["Category"]] = [moneyamount]
-# 	end
-# 	return hashStandardizedData
-# end
 
 
 def csvToHash(accountName)
@@ -72,13 +59,11 @@ def csvToHash(accountName)
 
 	    if row["Account"] == accountName
 		 	hashStandardizedData = myrow.fillHash
-		 	#hashStandardizedData = fillHash(hashStandardizedData, row, moneyamount)
-		 	#binding.pry
 		end
 	end
-	# binding.pry
 	return hashStandardizedData
 end
+
 
 def calculateSumAverage(hashStandardizedData2)
 	categorysumaverage = {}
@@ -88,6 +73,12 @@ def calculateSumAverage(hashStandardizedData2)
 	end
 	return categorysumaverage
 end
+
+
+
+
+
+
 
 def createSpacing(categorysumaverage)
 	longestCategoryLength = categorysumaverage.keys.max_by{|x| x.length}.length	
@@ -169,6 +160,8 @@ def createReportHTML(inputName)
 	return
 end
 
+
+
 def outputCSV(categorysumaverage, inputName, balance)
 	
 	filename = inputName + ".csv"
@@ -181,6 +174,8 @@ def outputCSV(categorysumaverage, inputName, balance)
 	}
 	return 
 end
+
+
 
 def createReportCSV(inputName)
 
@@ -199,14 +194,20 @@ inputNames = ARGV
 
 k = 0
 
+holdingArray = Array.new
+ways = ["csv", "CSV", "HTML", "html"]
+ways.each do |i|
+holdingArray << inputNames.delete(i)
+end
+
 while k < inputNames.length 
-
+	if holdingArray.include?("html") || holdingArray.include?("HTML")
+		createReportHTML(inputNames[k])
+	end
+	if holdingArray.include?("csv") || holdingArray.include?("CSV")
+		createReportCSV(inputNames[k])
+	end
 	createReportOnScreen(inputNames[k])
-
-	#createReportHTML(inputNames[k])
-
-	#createReportCSV(inputNames[k])
-
 	k += 1
 end
 
