@@ -1,0 +1,59 @@
+#!/usr/bin/env ruby
+
+require "pry"
+
+
+# function to remove a question
+def removeQuestion(questionsArray, questionnumber)
+	questionsArray.delete_at(questionnumber.to_i - 1)
+	return questionsArray
+end
+
+# function to add a question
+def addQuestion(questionsArray, newQuestion)
+	questionsArray.push(newQuestion)
+	return questionsArray
+end
+
+#function to print questions to screen
+def printToTerminal(questionsArray)
+	num = 1
+	questionsArray.each do |question| 
+		puts num.to_s + ". " + question + "\n"
+		num += 1
+	end
+end
+
+#function to read in questions.txt and place in an array
+def readQuestions
+	questionsArray = Array.new
+	open("questions.txt", "r") do |f|
+	  f.each_line do |line|
+	    questionsArray << line.chomp
+	  end
+	end
+	return questionsArray
+end
+
+
+input = ARGV
+
+function = input[0]
+
+questions = readQuestions
+
+if function == "rm"
+	questions = removeQuestion(questions, input[1])
+elsif function == "add"
+	questions = addQuestion(questions, input[1])
+else
+	printToTerminal(questions)
+end
+
+#write out questions.txt
+open('questions.txt', 'w') { |f| questions.each { |line| f << line + "\n" } }
+
+
+
+
+
