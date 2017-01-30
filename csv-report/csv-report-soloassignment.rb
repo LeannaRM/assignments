@@ -130,8 +130,28 @@ def csvAccountDataParsing
 	accounts.each_value do |value|
 		value.calculateFinalAmounts
 	end
+
+
+
+
 	return accounts
 end
+
+def testfunction(accounts, expected)
+
+	def test_sum(expected, actual)
+		if expected == actual
+			puts "Pass"
+		else
+			puts "Fail. Expected #{expected}, but got #{actual}"
+		end
+	end
+
+	test_sum(expected, accounts["Sonia"].getBalance)
+
+end
+
+
 
 
 
@@ -200,6 +220,12 @@ inputNames = ARGV
 k = 0
 
 data = csvAccountDataParsing
+
+#expectedResults = balance
+expectedResults = 3094.76
+
+testfunction(data, expectedResults)
+
 
 holdingArray = Array.new
 ways = ["csv", "CSV", "HTML", "html"]
