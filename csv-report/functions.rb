@@ -1,7 +1,3 @@
-require 'csv'
-
-require 'pry'
-
 class AccountClass
 
 	def initial_values
@@ -137,88 +133,6 @@ end
 
 
 
-# def test_sum
-# 	test.AccountClass.new
-# 	test.initial_values
-
-# 	# @categoryData = {}
-# 	test.calculateFinalAmounts
-# 	test_equality(expected, actual)
-#end
-
-
-#framework?
-def test_equality(expected, actual)
-	if expected == actual
-		puts "Pass"
-	else
-		puts "Fail. Expected #{expected}, but got #{actual}"
-	end
-end
-
-
-def testTotalAverage
-	#SET_UP
-	#using test csv file
-
-	#initial_values for new DataClass
-	test = DataClass.new
-	test.initial_values
-
-	#addData(row)
-	CSV.foreach("test.csv", {headers: true, return_headers: false}) do |row|
-		test.addData(row)
-	end
-
-	#EXERCISE
-	test.calculateFinalValues
-
-	expectedTotal = 4
-	expectedAverage = 2
-
-	#check
-	actualTotal = test.getTotal
-	puts test_equality(expectedTotal, actualTotal)
-
-	actualAverage = test.getAverage
-	puts test_equality(expectedAverage, actualAverage)
-
-end
-
-
-testTotalAverage()
-
-def testCategoryNames
-	#SET_UP
-	#using test csv file
-
-	#initial_values for new DataClass
-	test = AccountClass.new
-	test.initial_values
-
-	#EXERCISE
-	CSV.foreach("test2.csv", {headers: true, return_headers: false}) do |row|
-		test.addCategory(row)
-	end
-
-	#check
-	expectedKeyArray = ["a","b","c"]
-	if expectedKeyArray == test.getCategoryData.keys
-		puts "Pass"
-	else
-		puts "Fail"
-	end
-end
-
-testCategoryNames()
-
-
-
-
-
-
-
-
 ################# FOR OUTPUT AND DISPLAY BELOW ################
 
 
@@ -273,46 +187,5 @@ def createReportCSV(accountClass, name)
 	}
 	return 
 end
-
-
-
-########## For each name and type of output ##########
-
-inputNames = ARGV
-
-k = 0
-
-data = csvAccountDataParsing
-
-#expectedResults = balance
-# expectedResults = 3094.76
-
-# testfunction(data, expectedResults)
-
-
-holdingArray = Array.new
-ways = ["csv", "CSV", "HTML", "html"]
-ways.each do |i|
-	holdingArray << inputNames.delete(i)
-end
-
-while k < inputNames.length 
-	if data[inputNames[k].capitalize] == nil
-		puts inputNames[k] + " is not included in the csv file! Try again."
-		k += 1
-	else	
-		currentAccountData = data[inputNames[k].capitalize]
-		if holdingArray.include?("html") || holdingArray.include?("HTML")
-			createReportHTML(currentAccountData, inputNames[k])
-		end
-		if holdingArray.include?("csv") || holdingArray.include?("CSV")
-			createReportCSV(currentAccountData, inputNames[k])
-		end
-		createReportInTerminal(currentAccountData, inputNames[k])
-		k += 1
-
-	end
-end
-
 
 
