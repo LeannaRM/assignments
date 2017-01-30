@@ -100,7 +100,12 @@ end
 
 
 
+def initialize_report(inputName)
+	hashStandardizedData2 = csvToHash(inputName)
 
+	categorysumaverage = calculateSumAverage(hashStandardizedData2)
+
+	balance = calculateBalance(categorysumaverage)
 
 
 
