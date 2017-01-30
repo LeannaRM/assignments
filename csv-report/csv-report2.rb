@@ -10,6 +10,7 @@ class AccountClass
 	end
 
 	def addCategory(row)
+
 		@categoryData[row["Category"].chomp] = DataClass.new
 		@categoryData[row["Category"].chomp].initial_values
 	end
@@ -131,25 +132,87 @@ def csvAccountDataParsing
 		value.calculateFinalAmounts
 	end
 
-
-
-
 	return accounts
 end
 
-def testfunction(accounts, expected)
 
-	def test_sum(expected, actual)
-		if expected == actual
-			puts "Pass"
-		else
-			puts "Fail. Expected #{expected}, but got #{actual}"
-		end
+
+# def test_sum
+# 	test.AccountClass.new
+# 	test.initial_values
+
+# 	# @categoryData = {}
+# 	test.calculateFinalAmounts
+# 	test_equality(expected, actual)
+#end
+
+
+#framework?
+def test_equality(expected, actual)
+	if expected == actual
+		puts "Pass"
+	else
+		puts "Fail. Expected #{expected}, but got #{actual}"
+	end
+end
+
+
+def testTotalAverage
+	#SET_UP
+	#using test csv file
+
+	#initial_values for new DataClass
+	test = DataClass.new
+	test.initial_values
+
+	#addData(row)
+	CSV.foreach("test.csv", {headers: true, return_headers: false}) do |row|
+		test.addData(row)
 	end
 
-	test_sum(expected, accounts["Sonia"].getBalance)
+	#EXERCISE
+	test.calculateFinalValues
+
+	expectedTotal = 4
+	expectedAverage = 2
+
+	#check
+	actualTotal = test.getTotal
+	puts test_equality(expectedTotal, actualTotal)
+
+	actualAverage = test.getAverage
+	puts test_equality(expectedAverage, actualAverage)
 
 end
+
+
+testTotalAverage()
+
+def testCategoryNames
+	#SET_UP
+	#using test csv file
+
+	#initial_values for new DataClass
+	test = AccountClass.new
+	test.initial_values
+
+	#EXERCISE
+	CSV.foreach("test2.csv", {headers: true, return_headers: false}) do |row|
+		test.addCategory(row)
+	end
+
+	#check
+	expectedKeyArray = ["a","b","c"]
+	if expectedKeyArray == test.getCategoryData.keys
+		puts "Pass"
+	else
+		puts "Fail"
+	end
+end
+
+testCategoryNames()
+
+
 
 
 
@@ -222,9 +285,9 @@ k = 0
 data = csvAccountDataParsing
 
 #expectedResults = balance
-expectedResults = 3094.76
+# expectedResults = 3094.76
 
-testfunction(data, expectedResults)
+# testfunction(data, expectedResults)
 
 
 holdingArray = Array.new
