@@ -6,22 +6,69 @@ class AccountClass
 
 	def initial_values
 		@categoryData = {}
+		@balance = 0
 	end
 
 	def addCategory(row)
-		@categoryData[row["Category"]] = DataClass.new
-		@categoryData[row["Category"]].initial_values
+		@categoryData[row["Category"].chomp] = DataClass.new
+		@categoryData[row["Category"].chomp].initial_values
 	end
 
 	def addData(row)
-		@categoryData[row["Category"]].addData(row)
+		@categoryData[row["Category"].chomp].addData(row)
+	end
+
+	def calculateFinalAmounts
+		@categoryData.each_value do |value| 
+			value.calculateFinalValues
+			@balance = (@balance + value.getTotal).round(2)
+		end
 	end
 
 	def getCategoryData
 		return @categoryData
 	end
 
+	def getBalance
+		return @balance
+	end
+
+	#Next three for getting spacing right for in terminal printing
+	def calculateLongestTotal
+		@longestTotalLength = 0
+		@categoryData.each_value do |value| 
+			if @longestTotalLength < value.getTotal.to_s.length
+				@longestTotalLength = value.getTotal.to_s.length
+			end
+		end
+	end
+
+	def calculateLongestCategory
+		@longestCategoryLength = 0
+		@categoryData.each_key do |key| 
+			if @longestCategoryLength < key.length
+				@longestCategoryLength = key.length
+			end
+		end
+	end
+
+	def spaceData
+		@categoryDataWithSpacing = {}
+		@categoryData.each do |key, value|
+			
+			while key.length < @longestCategoryLength
+			 	key = key + " "
+			end
+			value.spaceTotals(@longestTotalLength)
+			@categoryDataWithSpacing[key] = value
+		end
+		return @categoryDataWithSpacing
+	end
+
 end
+
+
+
 
 class DataClass
 	def initial_values
@@ -37,167 +84,146 @@ class DataClass
 	def calculateFinalValues
 		@categoryTotal = @transactions.sum.round(2)
 		@categoryAverage = (@transactions.sum/@transactions.length).round(2)
-		@balance = @balance + @categoryTotal
 	end
+
+	def getTotal
+		return @categoryTotal
+	end
+
+	def getAverage
+		return @categoryAverage
+	end
+
+	def spaceTotals(longestTotalLength)
+		while @categoryTotal.to_s.length < longestTotalLength
+				@categoryTotal = @categoryTotal.to_s + " "
+		end
+	end
+
 end
 
-def set_initial_values(accountsHash,name)
 
+
+
+#function to set initial values for new categories and accounts
+def set_initial_values(accountsHash,name,row)
 	unless accountsHash.has_key?(name)
 		accountsHash[name] = AccountClass.new
 		accountsHash[name].initial_values
 	end
-	unless accountsHash[name].getCategoryData.has_key?(row["Category"])
+	unless accountsHash[name].getCategoryData.has_key?(row["Category"].chomp)
 		accountsHash[name].addCategory(row)
 	end
 	return accountsHash
 end
 
+#Main function that calls the other to get data read in and organized
+def csvAccountDataParsing
+	accounts = {}
 
+	CSV.foreach("accounts.csv", {headers: true, return_headers: false}) do |row|
+		accountName = row["Account"].chomp.capitalize
+		accounts = set_initial_values(accounts, accountName, row)
+		accounts[accountName].addData(row)
+	end
+
+	accounts.each_value do |value|
+		value.calculateFinalAmounts
+	end
+	return accounts
+end
+
+
+
+
+################# FOR OUTPUT AND DISPLAY BELOW ################
+
+
+def createReportInTerminal(accountClass, name)
+	#create spacing
+	accountClass.calculateLongestCategory
+	accountClass.calculateLongestTotal
+	accountClass.spaceData
+
+	puts "============================================================\n"
+	puts "Account: " + name.capitalize + "... Balance: $" + accountClass.getBalance.to_s + "\n"
+	puts "============================================================\n"
+	puts "Category" + "\t\t|" + "Total Spent" + "\t|" + "Average Transaction"
+	puts "------------------------|---------------|----------------"
+	accountClass.spaceData.each{|key, value| puts key + "\t\t|" + value.getTotal.to_s + "\t|" + value.getAverage.to_s}
+	return
+
+end
+
+
+def createReportHTML(accountClass, name)
+	puts "<h1>" + name.capitalize + "</h1>"
+	puts "<p>Total Balance: $" + accountClass.getBalance.to_s + "</p>"
+	puts "<hr>"
+	puts "<table>"
+	puts "\t<tr>"
+	puts "\t\t<td>Category</td>"
+	puts "\t\t<td>Total Spent</td>"
+	puts "\t\t<td>Average Transaction</td>"
+	puts "\t</tr>"
+
+	accountClass.getCategoryData.each do |key, value| 
+		puts "\t<tr>"
+		puts "\t\t<td>" + key + "</td>"
+		puts "\t\t<td>" + value.getTotal.to_s + "</td>"
+		puts "\t\t<td>" + value.getAverage.to_s + "</td>"
+		puts "\t</tr>"
+	end
+	puts "</table>"
+end
+
+
+def createReportCSV(accountClass, name)
+	
+	filename = name.capitalize + ".csv"
+
+	CSV.open(filename, 'w') { |f|
+  		f.puts  ["Category", "Total Spent", "Average Transaction"]
+  		accountClass.getCategoryData.each do |key, value|
+  			f.puts [key, value.getTotal, value.getAverage]
+  		end
+	}
+	return 
+end
+
+
+
+########## For each name and type of output ##########
 
 inputNames = ARGV
 
-accounts = {}
+k = 0
 
-CSV.foreach("accounts.csv", {headers: true, return_headers: false}) do |row|
-	accountName = row["Account"].chomp
-	accounts = set_initial_values(accounts, accountName)
-	accounts[accountName].addData(row)
+data = csvAccountDataParsing
+
+holdingArray = Array.new
+ways = ["csv", "CSV", "HTML", "html"]
+ways.each do |i|
+	holdingArray << inputNames.delete(i)
 end
 
-accounts.each_value do |value|
-	value.getCategoryData.each_value {|value| value.calculateFinalValues }
+while k < inputNames.length 
+	if data[inputNames[k].capitalize] == nil
+		puts inputNames[k] + " is not included in the csv file! Try again."
+		k += 1
+	else	
+		currentAccountData = data[inputNames[k].capitalize]
+		if holdingArray.include?("html") || holdingArray.include?("HTML")
+			createReportHTML(currentAccountData, inputNames[k])
+		end
+		if holdingArray.include?("csv") || holdingArray.include?("CSV")
+			createReportCSV(currentAccountData, inputNames[k])
+		end
+		createReportInTerminal(currentAccountData, inputNames[k])
+		k += 1
+
+	end
 end
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# def csvToHash(accountName)
-# 	hashAccount = Hash.new
-
-
-# 	CSV.foreach("accounts.csv", {headers: true, return_headers: false}) do |row|
-
-# 		row = cleanupRow(row)
-
-# 		hashAccount(row["Account"]) = hashAccountData
-
-# 	    if row["Account"] == accountName
-
-# 			moneyarray = Array.new
-# 			moneyarray << inflow.to_f - outflow.to_f
-
-# 			if hashStandardizedData.has_key?(row["Category"])
-# 				newarray = hashStandardizedData[row["Category"]].concat(moneyarray)
-# 				hashStandardizedData[row["Category"]] = newarray
-# 			else
-# 				hashStandardizedData[row["Category"]] = moneyarray
-# 			end
-
-
-# 		end
-# 	end
-
-# 	return hashStandardizedData
-
-# end
-
-
-
-# k = 0
-# while k < inputNames.length 
-
-# 	hashStandardizedData2 = csvToHash(inputNames[k])
-
-# 	categoryTotal = []
-# 	category = []
-# 	# category = {} # Or Hash.new
-# 	# {
-# 	# 	"Entertainment" => {"sum" => 200, "average" => 23},
-# 	# 	"Utilities" => {"sum" => 220, "average" => 20}
-# 	# }
-# 	categoryAverage =[]
-
-# 	# { and } can be replaced with do and end.
-# 	# hashStandardizedData2.each {|key, value| category[key] = value.sum }
-
-# 	hashStandardizedData2.each_value{|value|categoryTotal << value.sum}
-# 	hashStandardizedData2.each_key{|key|category << key}
-# 	hashStandardizedData2.each_value{|value|categoryAverage << value.sum/value.length}
-
-# 	# TODO Integrate these operations into one loop above.
-# 	categoryTotal.map! {|x| x.round(2)}
-# 	categoryAverage.map! {|x| x.round(2)}
-
-# 	balance = categoryTotal.sum
-
-# 	categoryTotal.map! {|x| x.to_s}
-
-
-
-
-# 	############### DISPLAY
-# 	puts "============================================================\n"
-# 	puts "Account: " + inputNames[k] + "... Balance: $" + balance.to_s + "\n"
-# 	puts "============================================================\n"
-# 	i = 0
-
-# 	longestCategoryLength = category.max_by{|x| x.length}.length
-# 	longestTotallength = categoryTotal.max_by{|x| x.length}.length
-
-# 	puts "Category" + "\t\t|" + "Total Spent" + "\t|" + "Average Transaction"
-
-# 	puts "------------------------|---------------|----------------"
-
-
-# 	while i < category.length do
-# 		while category[i].length < longestCategoryLength
-# 			category[i] = category[i] + " "
-# 		end
-# 		while categoryTotal[i].length < longestTotallength
-# 			categoryTotal[i] = categoryTotal[i] + " "
-# 		end
-
-# 		puts category[i].to_s + "\t\t|" + categoryTotal[i] + "\t|" + categoryAverage[i].to_s
-# 		i += 1
-# 	end
-# 	k += 1
-# end
