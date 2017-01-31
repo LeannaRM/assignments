@@ -1,4 +1,4 @@
-var RPS_main = require('./RPS');
+var functionslist = require('./functions');
 
 
 function test_equality(expected, actual){
@@ -16,7 +16,7 @@ for (i=0; i<3; i++){
   for (j=0; j<3; j++){
     p1 = choices[i]
     p2 = choices[j]
-    var actual = RPS_main.determineWinnerFunction(p1,p2);
+    var actual = functionslist.determineWinnerFunction(p1,p2);
     test_equality(expected[count],actual)
     count+=1
   }
