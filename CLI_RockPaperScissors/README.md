@@ -6,4 +6,4 @@ In order to play you need two players, all three files (RPS.js, functions.js, & 
 
 HOW TO USE
 
-To play a game type "node RPS.js" into the terminal. Then each player can choose their weapon. Finally, 
+To play a game type "node RPS.js" into the terminal. Then each player can choose their weapon by typing "rock", "paper", or "scissors". Finally, the program will output the winner of the round.

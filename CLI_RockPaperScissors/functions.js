@@ -1,5 +1,3 @@
-
-
 function determineWinner(p1_weapon, p2_weapon){
 	var text = ""
 	if (p1_weapon == "rock"){
@@ -24,6 +22,18 @@ function determineWinner(p1_weapon, p2_weapon){
 	else {text = "P1 must choose Rock, Paper or Scissors" + text}
 	return text
 }
+function updateScore(score, result){
+	if (result == "P1 wins!"){
+		score[0] += 1
+	}
+	else if (result == "P2 wins!"){
+		score[1] += 1
+	}
+	return score
+}
 
 
-module.exports = {determineWinnerFunction:determineWinner}
+module.exports = {
+	determineWinnerFunction:determineWinner,
+	updateScoreFunction:updateScore
+}
