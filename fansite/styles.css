@@ -19,14 +19,23 @@ h1{
 	}
 
 h2{
+	padding-top: 90px;
 	color:#911F27;
 	text-align:left;
 }
 
 #internal-links {
 	font-family: tahoma, sans-serif;
-	font-size: 12px;
+	font-size: 14px;
 	color:#630A10;
+	line-height: 150%;
+}
+
+#current-link {
+	color: black;
+	pointer-events: none;
+	cursor: default;
+	text-decoration: none;
 }
 
 p {
@@ -43,4 +52,12 @@ h3{
 	padding-top:50px;
 	color:#911F27;
 	text-align:left;
+}
+
+#header{
+	background-color: #c78864;
+	height:90px;
+	width:100%;
+	position:fixed;
+	top :0;
 }
