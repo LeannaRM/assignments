@@ -1,11 +1,11 @@
 var functions = require('./functions');
 
-var score = [0,0];
+var score = {"Player 1": 0,"Player 2": 0};
 
-	var prompt = require('prompt');
-	prompt.start();
-playRound()
+var prompt = require('prompt');
+prompt.start();
 
+playRound();
 
 function playRound(){
 	prompt.get(['P1'], function (err, result) {
@@ -17,18 +17,33 @@ function playRound(){
 				if (p2_weapon == "paper"|| p2_weapon == "rock" || p2_weapon == "scissors"){
 					result = functions.determineWinnerFunction(p1_weapon,p2_weapon)
 					score = functions.updateScoreFunction(score, result)
-					console.log(result)
-					console.log("Current score:\n Player 1: " + score[0] + " Player 2: " + score[1])
-					if (score[0] < 3 && score[1]< 3){
-						playRound()
-					}
+					startorend(score)
 				}
-				else{console.log("Player 2 please enter rock, paper, or scissors")}
+				else{
+					console.log("Player 2 please enter rock, paper, or scissors. Replay round.")
+					playRound()
+				}
 			});
 		}
-		else{console.log("Player 1 please enter rock, paper, or scissors")}
+		else{
+			console.log("Player 1 please enter rock, paper, or scissors. Replay round.")
+			playRound()
+		}
 	});
 	return score
+}
+
+
+function startorend(score){
+	if (score["Player 1"]<3 && score["Player 2"]<3){
+		playRound()
+	}
+	else {
+		if (score["Player 1"] = 3){console.log("Player 1 wins best of 5 series!")}
+		else{console.log("Player 2 wins best of 5 series!")}
+		console.log("Game score:\n Player 1: "+ score["Player 1"] + " Player 2: " + score["Player 2"])
+	}
+	return
 }
 
 
