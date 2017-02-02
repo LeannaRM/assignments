@@ -1,0 +1,30 @@
+<head>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<title>Account Info</title>
+</head>
+
+	<% #@names.each do |name| %>
+
+<h1 class="test"> <%= @name.capitalize %> </h1>
+<p>Total Balance: $<%= @data[@name].getBalance.to_s %></p>
+
+    <table>
+    <tr>
+        <td>Category</td>
+        <td>Total Spent</td>
+        <td>Average Transaction</td>
+    </tr>
+
+    <% @data[@name].getCategoryData.each do |key, value| %>
+    <tr>
+        <td><%= key %></td>
+        <td>$<%= value.getTotal.to_s %></td>
+        <td>$<%= value.getAverage.to_s %></td>
+    </tr>
+    <% end %>
+    </table>
+
+
+<% #end %>
+
+<a href="/">Go back</a>

@@ -2,14 +2,7 @@ require 'csv'
 
 require_relative "./functions.rb"
 
-#framework?
-def test_equality(expected, actual)
-	if expected == actual
-		puts "Pass"
-	else
-		puts "Fail. Expected #{expected}, but got #{actual}"
-	end
-end
+require_relative "/Users/paulmcdonald/Code/test_framework.rb"
 
 
 def testTotalAverage
@@ -58,13 +51,8 @@ def testCategoryNames
 
 	#check
 	expectedKeyArray = ["a","b","c"]
-	actualArray = test.getCategoryData.keys
-	
-	if expectedKeyArray == test.getCategoryData.keys
-		puts "Pass"
-	else
-		puts "Fail"
-	end
+	test_equality(expectedKeyArray, test.getCategoryData.keys)
+
 end
 
 testCategoryNames()
