@@ -30,14 +30,34 @@ input[type="submit"]{
     font-size: 16px;
     border-radius: 8px;
     margin-top: 20px;
+    font-family: "Comic Sans MS";
+}
+.startgamebutton{
+	background-color: #D93240;
+    border: none;
+    border-radius: 8px;
+    padding:14px 27px;
+    /*width:180px;*/
+    /*height: 40px;*/
+    display:inline-block;
 }
 
-.bottombuttons{
+a{
+	color: #BFD4D9;
+	font-size: 16px;
+    text-decoration: none;
+    text-align: center;
+}
+
+.inlinebuttons{
    display:inline-block;
    margin-right: 10px;
 }
 .bottom{
 	padding-top: 110px;
+	text-align: center;
+}
+.end{
 	text-align: center;
 }
 
@@ -48,4 +68,6 @@ select{
 	width: 268px;
 	background-color: #BFD4D9;
 	color: #17A697;
+	font-family: "Comic Sans MS"
 }
+

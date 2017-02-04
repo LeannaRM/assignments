@@ -30,11 +30,11 @@
 </form>
 
 <div class="bottom">
-<form action="/startgame?player1name=Paul&player2name=Leanna" class="bottombuttons">
-	<input type="submit" value="Start game over">
-</form>
+<div class="startgamebutton">
+<a href="/startgame?player1name=<%=@names[0]%>&player2name=<%=@names[1]%>">Start game over</a>
+</div>
 
-<form action="/" class="bottombuttons">
+<form action="/" class="inlinebuttons">
 	<input type="submit" value="New players">
 </form>
 </div>

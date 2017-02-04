@@ -14,12 +14,14 @@
 <h3><%= @names[0] %> <%= @score["Player 1"] %></h3>
 <h3><%= @names[1] %> <%= @score["Player 2"] %></h3><br>
 
-<form action = "/startgame">
-	<input type="submit" value="Start new game">
-</form>
+<div class="end">
+<div class="startgamebutton">
+<a href="/startgame?player1name=<%=@names[0]%>&player2name=<%=@names[1]%>">Start new game</a>
+</div>
 
-<form action="/">
+<form action="/" class="inlinebuttons">
 	<input type="submit" value="New players">
 </form>
+</div>
 
 </body>
