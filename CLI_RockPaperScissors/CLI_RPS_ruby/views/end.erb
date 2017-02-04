@@ -1,0 +1,25 @@
+<head>
+	<link rel="stylesheet" type="text/css" href="new.css">
+	<title>Account Info</title>
+</head>
+
+<body>
+
+<div ID = "header">
+<h1 ID="headertext">Rock, Paper, Scissors</h1>
+</div>
+
+<h2>End of game</h2>
+<h2>Final score is </h2>
+<h3><%= @names[0] %> <%= @score["Player 1"] %></h3>
+<h3><%= @names[1] %> <%= @score["Player 2"] %></h3><br>
+
+<form action = "/startgame">
+	<input type="submit" value="Start new game">
+</form>
+
+<form action="/">
+	<input type="submit" value="New players">
+</form>
+
+</body>

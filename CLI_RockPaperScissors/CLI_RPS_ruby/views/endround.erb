@@ -1,0 +1,42 @@
+<head>
+	<link rel="stylesheet" type="text/css" href="new.css">
+	<title>Account Info</title>
+</head>
+<body>
+
+<div ID = "header">
+<h1>Rock, Paper, Scissors</h1>
+</div>
+
+<% if @result == "P1 wins!" %>
+	<h2><%= @names[0]%> wins the round!</h2>
+<% elsif @result == "P2 wins!" %>
+	<h2><%= @names[1]%> wins the round!</h2>
+<% else %>
+	<h2>It's a tie! Play the round again!</h2>
+<% end %>
+
+
+<h2>Current score is </h2>
+<h3><%= @names[0] %> <%= @score["Player 1"] %></h3>
+<h3><%= @names[1] %> <%= @score["Player 2"] %></h3><br>
+
+<form action="/newround">
+	<input type="submit" value="Continue">
+</form>
+
+
+
+
+<div class="bottombuttons">
+<form action="/startgame?player1name=Paul&player2name=Leanna">
+	<input type="submit" value="Start game over">
+</form>
+
+<form action="/">
+	<input type="submit" value="New players">
+</form>
+</div>
+
+
+</body>

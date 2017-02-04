@@ -1,0 +1,42 @@
+<head>
+	<link rel="stylesheet" type="text/css" href="new.css">
+	<title>Account Info</title>
+</head>
+<body>
+
+<div ID = "header">
+<h1>Rock, Paper, Scissors</h1>
+</div>
+
+
+<h2>Current score is </h2>
+<h3><%= @names[0] %> <%= @score["Player 1"] %></h3>
+<h3><%= @names[1] %> <%= @score["Player 2"] %></h3><br>
+
+<% if @player == 0 %>
+	<form action="/player2" method="post">
+<% else %>
+	<form action="/playround" method="post">
+<% end %>
+	<label><%= @names[@player] %> choose your weapon</label>
+	<select name="weapon">
+		<option selected disabled>Choose here</option>
+		<option value="rock">Rock</option>
+		<option value="paper">Paper</option>
+		<option value="scissors">Scissors</option>
+	</select>
+	<br>
+	<input type="submit">
+</form>
+
+<div class="bottom">
+<form action="/startgame?player1name=Paul&player2name=Leanna" class="bottombuttons">
+	<input type="submit" value="Start game over">
+</form>
+
+<form action="/" class="bottombuttons">
+	<input type="submit" value="New players">
+</form>
+</div>
+
+</body>

@@ -1,0 +1,51 @@
+body{
+	font-family: "Comic Sans MS", Helvetica;
+	background-color:#638CA6;
+	color: #0F5959;
+	font-size: 1.5em;
+}
+
+h1{
+    text-align: center;
+    color: #BFD4D9;
+}
+h2, h3{
+    text-align: center;
+    color: #0F5959;
+}
+form{
+	text-align: center;
+}
+
+#header{
+	background-color:#D93240;
+}
+input[type="submit"]{
+	background-color: #D93240;
+    border: none;
+    color: #BFD4D9;
+    padding: 14px 27px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.bottombuttons{
+   display:inline-block;
+   margin-right: 10px;
+}
+.bottom{
+	padding-top: 110px;
+	text-align: center;
+}
+
+select{
+	border: 1px solid;
+	font-size: 16px;
+	height: 34px;
+	width: 268px;
+	background-color: #BFD4D9;
+	color: #17A697;
+}
