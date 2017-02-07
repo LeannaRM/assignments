@@ -75,8 +75,13 @@ window.addEventListener("load", function (){
 
 	function nameModal(){
 		document.getElementsByClassName("modal")[0].style.display = "block";
+		document.getElementsByClassName("modal__content")[0].style.display = "block";
 		nametext = this.innerText;
 		document.getElementsByClassName("modal__title")[0].innerText = nametext;
+		friends = this.dataset.friends;
+		body = nametext + " has " + friends + " friends";
+		document.getElementsByClassName("modal__body")[0].innerText = body;
+
 	}
 
 	var names = document.getElementsByClassName("name");
@@ -86,14 +91,30 @@ window.addEventListener("load", function (){
 
 
 	function closeModal(){
+		document.getElementsByClassName("modal__content")[0].style.display = "none";
 		document.getElementsByClassName("modal")[0].style.display = "none";
 	}
 
 	var exbox = document.getElementsByClassName("modal__close")[0];
 	exbox.addEventListener("click",closeModal);
 
+	var background = document.getElementsByClassName("modal")[0];
+	background.addEventListener("click",closeModal);
 
 
+	function shareModal(){
+		document.getElementsByClassName("modal")[0].style.display = "block";
+		document.getElementsByClassName("modal__content")[0].style.display = "block";
+
+		nametext = this.parentElement.parentElement.children[0].children[1].children[0].innerText;
+		title = "Share " + nametext +"'s post";
+		document.getElementsByClassName("modal__title")[0].innerText = title;
+		body = this.parentElement.parentElement.children[1].children[0].innerText;
+		document.getElementsByClassName("modal__body")[0].innerText = body;
+	}
+
+	var sharetrigger = document.getElementsByClassName("action--share");
+	sharetrigger[0].addEventListener("click",shareModal);
 
 
 
