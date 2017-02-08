@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Account Summary for <%=@name.capitalize%></title>
+</head>
+<body>
+	<p>Select an account to view or option below:</p>
+	<select onChange="window.location.href=this.value">
+		<option value="/" selected="selected">Main Menu</option>
+		<option value="/summary?name=<%=@name%>">Account Summary</option>
+		<option value="/details">Account details</option>
+		<option value="/addcsv">Add New Transaction</option>
+	</select>
+
+	<h1><%= @name.capitalize %>'s Account Summary</h1>
+	<p>Total Balance: $<%= @data[@name].getBalance.to_s %></p>
+	<table>
+	<tr>
+		<td>Category</td>
+		<td>Total Spent</td>
+		<td>Average Transaction</td>
+	</tr>
+
+	<% @data[@name].getCategoryData.each do |key, value| %>
+		<tr>
+			<td><%= key %></td>
+			<td>$<%= value.getTotal.to_s %></td>
+			<td>$<%= value.getAverage.to_s %></td>
+		</tr>
+	<% end %>
+	</table>
+</body>
+</html>

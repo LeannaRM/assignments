@@ -1,20 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login error!</title>
+</head>
 <body>
 
-<% if session[:notcurrentuser] %>
+	<% if session[:notcurrentuser] %>
 
-	<h1>Login error!</h1>
+		<h1>Login error!</h1>
 
-	<p>Sorry, the username <%= @name %> does not exist, or the password was incorrect.</p>
+		<p>Sorry, the username <%= @name %> does not exist, or the password was incorrect.</p>
 
-	<p><a href="/">Click here</a> to return to login page.</p>
+		<p>
+			<a href="/">Click here</a> to return to login page.
+		</p>
 
-	<% session.delete(:notcurrentuser) %>
+		<% session.delete(:notcurrentuser) %>
 
-<% else %>
+	<% else %>
 
-	<h2>You are not logged in!</h2>
+		<h2>You are not logged in!</h2>
 
-	<p>Please return to the <a href="/">login page</a>.</p>
+		<p>Please return to the <a href="/">login page</a>.</p>
 
-<% end %>
+	<% end %>
 </body>
+</html>

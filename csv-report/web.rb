@@ -8,28 +8,58 @@ require 'csv'
 
 enable :sessions
 
+get("/"){
+	@user = session[:currentuser]
+	erb :login
+}
+
+post("/login"){
+	name = params["username"]
+	password = params["password"]
+
+	#send to main screen if login successful and to error if not
+	checkLoginSuccess(name,password)	
+}
+
+get('/loginerror'){
+	@name = session[:notcurrentuser]
+	erb :loginerror
+}
+
 get("/index") {
-	@message = session[:message]
+	@name = session[:currentuser].capitalize
+	checkUsername(@name)
 	erb :index
 }
 
-get("/data") {
+get("/summary") { #was /data
 	checkUsername(session[:currentuser])
 	@data = csvAccountDataParsing
 	@name = params["name"]
-	erb :data
+	erb :summary
 }
 
-post("/printcsv") {
-	removeRowFunction(params)
+get("/details") { #was /printcsv
+	checkUsername(session[:currentuser])
+	@transactions = userAccount.returnTransactions
+	erb :details 
+}
+
+post("/removeTransaction") {
+	userAccount.removeTransaction(param[row_to_remove])
 	redirect('/removecsvsuccess')
 }
 
-get("/printcsv") {
+get("/removecsvsuccess") {
 	checkUsername(session[:currentuser])
-	@rows = printCSV(params)
-	erb :printcsv
+	erb :removecsvsuccess
 }
+
+
+
+
+
+
 
 post("/addcsv") {
 	addRowFunction(params)
@@ -46,10 +76,7 @@ get("/addcsvsuccess") {
 	erb :addcsvsuccess
 }
 
-get("/removecsvsuccess") {
-	checkUsername(session[:currentuser])
-	erb :removecsvsuccess
-}
+
 
 get("/editrow") {
 	@rows = printCSV(params)
@@ -68,20 +95,16 @@ post('/editcsv') {
 	redirect('/editrow')
 }
 
-get("/"){
-	@user = session[:currentuser]
-	erb :login
+
+
+
+post('/logout'){
+	session.delete(:currentuser)
+	redirect('/')
 }
 
-get('/loginerror'){
-	@name = session[:notcurrentuser]
-	erb :loginerror
-}
-
-post("/login"){
-	name = params["username"]
-	password = params["password"]
-
+def checkLoginSuccess(name,password)
+	#read in csv with all user, password pairs
 	allusers = {}
 	CSV.foreach("./views/users.csv", {headers:true, return_headers: false}) do |row|
 		key = row["username"]
@@ -89,23 +112,20 @@ post("/login"){
 		allusers[key]=value
 	end
 
-	temppassword = allusers[@name]
+	#check for a match
+	temppassword = allusers[name]
 	if password == temppassword
-		session[:currentuser] = @name
-		session[:message] = "Welcome #{name.capitalize}!"
+		session[:currentuser] = name
+		userAccount = AccountByTransaction.new
+		userAccount.setup(name)
 		redirect('/index')
 	else
-		session[:notcurrentuser] = @name
+		session[:notcurrentuser] = name
 		redirect('/loginerror')
 	end
-	
-}
+end
 
-post('/logout'){
-	session.delete(:currentuser)
-	redirect('/')
-}
-
+#if user exists then a user is logged in
 def checkUsername(user)
 	unless user
 		redirect('/loginerror')

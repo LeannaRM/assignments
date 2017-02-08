@@ -2,10 +2,11 @@ require 'csv'
 require 'pry'
 
 #load accounts.csv file into program
-class EditRow
-	def test(params)
-		@arrayOfRows = []
-		@vars = params
+class AccountByTransaction
+	def setup(name)
+		@name = name
+		@arrayOfTransactions = []
+		self.loadArray
 	end
 
 	def loadArray
@@ -15,8 +16,21 @@ class EditRow
 			row["Payee"] = row["Payee"].chomp
 			row["Inflow"] = row["Inflow"].delete(",")
 			row["Outflow"] = row["Outflow"].delete(",")
-			@arrayOfRows << row.to_s
+			if row["Payee"] == @name
+				@arrayOfTransactions << row.to_s
+			end
 		end
+	end
+
+	def returnTransactions
+		return @arrayOfTransactions
+	end
+
+	#remove a question from the questions.txt file
+	def removeRow(numString)
+		numToRemove = numString.to_i - 1
+		@arrayOfTransactions.delete_at(numToRemove)
+		return @arrayOfTransactions
 	end
 
 #add a row to the accounts.csv file
@@ -26,11 +40,7 @@ class EditRow
 		@arrayOfRows.push(csvrow)
 	end
 
-	#remove a question from the questions.txt file
-	def removeRow
-		numToRemove = @vars["row_to_remove"].to_i - 1
-		@arrayOfRows.delete_at(numToRemove)
-	end
+
 
 
 #update accounts.csv after adding/removing a row
@@ -43,9 +53,7 @@ class EditRow
 		end
 	end
 
-	def returnArray
-		return @arrayOfRows
-	end
+
 
 end
 

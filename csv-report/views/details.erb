@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Account details for <%= @name %></title>
+</head>
+<body>
+
+	<p>Select an account to view or option below:</p>
+	<select onChange="window.location.href=this.value">
+		<option value="/" selected="selected">Main Menu</option>
+		<option value="/summary?name=<%=@name%>">Account Summary</option>
+		<option value="/details">Account details</option>
+		<option value="/addcsv">Add New Transaction</option>
+	</select>
+
+
+	<table>
+	<thead>
+		<tr>
+			<th>T#</th>
+			<th>Account</th>
+			<th>Date</th>
+			<th>Payee</th>
+			<th>Category</th>
+			<th>Outflow</th>
+			<th>Inflow</th>
+		</tr>
+	</thead>
+	<% count = 0 %>
+	<% @transactions.each do |row| %>
+		<% count = count + 1 %>
+		<tr>
+			<td><%= count.to_s + ": " %></td>
+			<% currentRow = row.split(",")
+			currentRow.each do |x| %>
+				<td><%= x %> </td>
+			<% end %>
+		</tr>
+	<% end %>
+	</table>
+
+	<table>
+		<tr>
+			<td>
+				<p>Enter a line (T#) to remove:</p>
+				<form action="/removeTransaction" method="post">
+					<p><input type="number" name="row_to_remove"></p>
+					<p><input type="submit"></p>
+				</form>
+			</td>
+			<td>
+				<p>Enter a line (T#) to edit:</p>
+				<form action="/editcsv" method="post">
+					<p><input type="number" name="row_to_edit"></p>
+					<p><input type="submit"></p>
+				</form>
+			</td>
+		</tr>
+	</table>
+
+</body>
+</html>
