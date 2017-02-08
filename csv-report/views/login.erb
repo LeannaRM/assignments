@@ -1,0 +1,19 @@
+<head>
+	<link rel="stylesheet" type="text/css" href="/style.css">
+	<title>Account Info</title>
+</head>
+<body>
+
+<p>Welcome to Accounts Management. Please login below:</p>
+
+<% if @user %>
+	<p>The user <%= @user %> is already logged in.</p>
+	<p><a href="/index">Click here</a> to return to the admin menu.</p>
+<% else %>
+	<form action="/login" method="post">
+		<p>Username: <input type="text" name="username"></p>
+		<p>Password: <input type="text" name="password"></p>
+		<p><input type="submit"></p>
+	</form>
+<% end %>
+</body>
