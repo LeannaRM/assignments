@@ -8,6 +8,9 @@ require 'csv'
 
 enable :sessions
 
+allAccounts = AccountByTransaction.new
+allAccounts.setup
+
 get("/"){
 	@user = session[:currentuser]
 	erb :login
@@ -18,7 +21,7 @@ post("/login"){
 	password = params["password"]
 
 	#send to main screen if login successful and to error if not
-	checkLoginSuccess(name,password)	
+	checkLoginSuccess(name,password,allAccounts)
 }
 
 get('/loginerror'){
@@ -32,49 +35,40 @@ get("/index") {
 	erb :index
 }
 
-get("/summary") { #was /data
+get("/summary") {
 	checkUsername(session[:currentuser])
 	@data = csvAccountDataParsing
-	@name = params["name"]
+	@name = session[:currentuser].capitalize
 	erb :summary
 }
 
-get("/details") { #was /printcsv
+get("/details") {
 	checkUsername(session[:currentuser])
-	@transactions = userAccount.returnTransactions
+	@message = session.delete(:message)
+	@name = session[:currentuser].capitalize
+	@transactions = allAccounts.returnTransactions(session[:currentuser])
 	erb :details 
 }
 
+
 post("/removeTransaction") {
-	userAccount.removeTransaction(param[row_to_remove])
-	redirect('/removecsvsuccess')
+	allAccounts.removeTransaction(session[:currentuser],params["row_to_remove"])
+	session[:message] = "Transaction successfully removed!"
+	redirect('/details')
 }
 
-get("/removecsvsuccess") {
+
+post("/addTransaction") {
+	allAccounts.addRow(params)
+	session[:message] = "Transaction successfully added!"
+	redirect('/details')
+}
+
+get("/addTransaction") {
 	checkUsername(session[:currentuser])
-	erb :removecsvsuccess
+	erb :addTransaction
 }
 
-
-
-
-
-
-
-post("/addcsv") {
-	addRowFunction(params)
-	redirect('/addcsvsuccess')
-}
-
-get("/addcsv") {
-	checkUsername(session[:currentuser])
-	erb :addcsv
-}
-
-get("/addcsvsuccess") {
-	checkUsername(session[:currentuser])
-	erb :addcsvsuccess
-}
 
 
 
@@ -103,7 +97,7 @@ post('/logout'){
 	redirect('/')
 }
 
-def checkLoginSuccess(name,password)
+def checkLoginSuccess(name,password,allAccounts)
 	#read in csv with all user, password pairs
 	allusers = {}
 	CSV.foreach("./views/users.csv", {headers:true, return_headers: false}) do |row|
@@ -116,8 +110,6 @@ def checkLoginSuccess(name,password)
 	temppassword = allusers[name]
 	if password == temppassword
 		session[:currentuser] = name
-		userAccount = AccountByTransaction.new
-		userAccount.setup(name)
 		redirect('/index')
 	else
 		session[:notcurrentuser] = name

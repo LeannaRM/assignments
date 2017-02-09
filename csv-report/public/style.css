@@ -1,32 +1,29 @@
 /*font-family: 'Raleway', sans-serif;
 font-family: 'Dancing Script', cursive;*/
 
-h1{
-	font-family: cursive;
-	font-weight: bold;
-	font-size:30pt;
+.my-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.my-container {
+    background-color: lightblue;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2;
+    opacity: 0.4;
 }
 
 body {
-	background-color: lightblue
-}
-
-p{
-	font-size: 15pt;
-	font-family: Arial;
-}
-
-table, th {
-	border: 2px solid black;
-    border-collapse: collapse;
-    background-color: white;
-    font-size: 12pt;
-	font-family: Arial;
-}
-
-td {
-    border: 1px solid black;
-    border-collapse: collapse;
-    font-size: 12pt;
-	font-family: Arial;
+    background-color: lightblue;
+    font-family: 'Raleway', sans-serif;
+    background-image: url("http://cdn.wallpapersafari.com/23/13/xHVrKT.jpg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
+    z-index: -2;
 }

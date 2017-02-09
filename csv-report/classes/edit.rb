@@ -3,9 +3,10 @@ require 'pry'
 
 #load accounts.csv file into program
 class AccountByTransaction
-	def setup(name)
-		@name = name
+	def setup
+		@accountname = ""
 		@arrayOfTransactions = []
+		@arrayOfTransactionsUser = []
 		self.loadArray
 	end
 
@@ -16,38 +17,43 @@ class AccountByTransaction
 			row["Payee"] = row["Payee"].chomp
 			row["Inflow"] = row["Inflow"].delete(",")
 			row["Outflow"] = row["Outflow"].delete(",")
-			if row["Payee"] == @name
-				@arrayOfTransactions << row.to_s
-			end
+			@arrayOfTransactions << row.to_s
 		end
 	end
 
-	def returnTransactions
-		return @arrayOfTransactions
+	def returnTransactions(name)
+		if @arrayOfTransactionsUser == []
+			@arrayOfTransactions.each do |transaction|
+				if name.capitalize == transaction.split(",")[0]
+					@arrayOfTransactionsUser << transaction
+				end
+			end
+		end
+		return @arrayOfTransactionsUser
 	end
 
 	#remove a question from the questions.txt file
-	def removeRow(numString)
+	def removeTransaction(name, numString)
 		numToRemove = numString.to_i - 1
-		@arrayOfTransactions.delete_at(numToRemove)
-		return @arrayOfTransactions
+		@arrayOfTransactions.delete(@arrayOfTransactionsUser[numToRemove])
+		@arrayOfTransactionsUser.delete_at(numToRemove)
+		self.updateCSVFile
 	end
 
 #add a row to the accounts.csv file
-	def addRow
-		new_row = @vars.values
-		csvrow = new_row.to_csv
-		@arrayOfRows.push(csvrow)
+	def addRow(rowInfo)
+		rowInfoArray = rowInfo.values
+		csvrow = rowInfoArray.to_csv
+		@arrayOfTransactionsUser.push(csvrow)
+		@arrayOfTransactions.push(csvrow)
+		self.updateCSVFile
 	end
-
-
-
 
 #update accounts.csv after adding/removing a row
 	def updateCSVFile
 		File.open('accounts.csv', 'w') do |file|
 			file << "Account,Date,Payee,Category,Outflow,Inflow\n"
-			@arrayOfRows.each do |line|
+			@arrayOfTransactions.each do |line|
 				file << line
 			end
 		end
@@ -57,53 +63,53 @@ class AccountByTransaction
 
 end
 
-def printCSV(params)
-	newRow = EditRow.new
-	newRow.test(params)
-	newRow.loadArray
-	return newRow.returnArray
-end
+# def printCSV(params)
+# 	newRow = EditRow.new
+# 	newRow.test(params)
+# 	newRow.loadArray
+# 	return newRow.returnArray
+# end
 
-def addRowFunction(params)
-	newRow = EditRow.new
-	newRow.test(params)
-	newRow.loadArray
-	newRow.addRow
-	newRow.updateCSVFile
-end
+# def addRowFunction(params)
+# 	newRow = EditRow.new
+# 	newRow.test(params)
+# 	newRow.loadArray
+# 	newRow.addRow
+# 	newRow.updateCSVFile
+# end
 
-def removeRowFunction(params)
-	newRow = EditRow.new
-	newRow.test(params)
-	newRow.loadArray
-	newRow.removeRow
-	newRow.updateCSVFile
-end
+# def removeRowFunction(params)
+# 	newRow = EditRow.new
+# 	newRow.test(params)
+# 	newRow.loadArray
+# 	newRow.removeRow
+# 	newRow.updateCSVFile
+# end
 
-def rowToArray(arrayOfRows,rowToGet)
-	row_to_edit = arrayOfRows.values_at(rowToGet).shift
-	newArray = row_to_edit.delete("\n").split(",")
-	return newArray
-end
+# def rowToArray(arrayOfRows,rowToGet)
+# 	row_to_edit = arrayOfRows.values_at(rowToGet).shift
+# 	newArray = row_to_edit.delete("\n").split(",")
+# 	return newArray
+# end
 
-def editRowFunction(params,rowToGet)
-	columnToGet = params["x"].to_i
-	newText = params["info_to_edit"]
+# def editRowFunction(params,rowToGet)
+# 	columnToGet = params["x"].to_i
+# 	newText = params["info_to_edit"]
 
-	arrayOfRows = printCSV({})
-	newArray = rowToArray(arrayOfRows,rowToGet)
+# 	arrayOfRows = printCSV({})
+# 	newArray = rowToArray(arrayOfRows,rowToGet)
 
-	newArray[columnToGet] = newText
-	newcsvrow = newArray.to_csv
-	arrayOfRows[rowToGet] = newcsvrow
-	updateCSVFile(arrayOfRows)
-end
+# 	newArray[columnToGet] = newText
+# 	newcsvrow = newArray.to_csv
+# 	arrayOfRows[rowToGet] = newcsvrow
+# 	updateCSVFile(arrayOfRows)
+# end
 
-def updateCSVFile(arrayOfRows)
-	File.open('accounts.csv', 'w') do |file|
-		file << "Account,Date,Payee,Category,Outflow,Inflow\n"
-		arrayOfRows.each do |line|
-			file << line
-		end
-	end
-end
+# def updateCSVFile(arrayOfRows)
+# 	File.open('accounts.csv', 'w') do |file|
+# 		file << "Account,Date,Payee,Category,Outflow,Inflow\n"
+# 		arrayOfRows.each do |line|
+# 			file << line
+# 		end
+# 	end
+# end
