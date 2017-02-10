@@ -4,7 +4,7 @@
 	<link rel="stylesheet" type="text/css" href="/style.css">
 	<link href="https://fonts.googleapis.com/css?family=Dancing+Script|Raleway" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet">
-	<title>Account details for <%= @name %></title>
+	<title>Add transaction</title>
 </head>
 <body>
 
@@ -20,11 +20,9 @@
 	</div>
 
 
-	<%if @message %>
-		<h3><%= @message %></h3>
-	<% end %>
 
 	<h3>Account Details for <%= @name %></h3>
+
 	<table>
 	<thead>
 		<tr>
@@ -49,5 +47,34 @@
 		</tr>
 	<% end %>
 	</table>
+
+	<div class="remove--container">
+		<p>Enter a line (T#) to remove:</p>
+		<form action="/removeTransaction" method="post">
+			<p><input type="number" name="row_to_remove"></p>
+			<p><input type="submit" class="submit--remove"></p>
+		</form>
+	</div>
+
+	<div class="edit--container">
+		<p>Enter a line (T#) to edit:</p>
+		<form action="/editcsv" method="post">
+			<p><input type="number" name="row_to_edit"></p>
+		</form>
+	</div>
+
+	<div class="add--container">
+		<p>Add new information to an account:</p>
+		<form action="/addTransaction" method="post">
+			<p>Date: <input type="text" name="Date"></p>
+			<p>Payee: <input type="text" name="Payee"></p>
+			<p>Category: <input type="text" name="Category"></p>
+			<p>Inflow: <input type="text" name="Inflow"></p>
+			<p>Outflow: <input type="text" name="Outflow"></p>
+
+			<input type="Submit" class="submit--add">
+		</form>
+	</div>
+
 </body>
 </html>

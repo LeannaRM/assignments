@@ -7,27 +7,20 @@
 	<title>Main Account Page</title>
 </head>
 <body>
-<!-- 	<div class="header--container"> 
+
+	<div class="header--container"> 
 		<h1 class="header--title">Accounts Management</h1>
 		<div class="headerbuttons--container">
-			<form action="/" class="header--buttons"><input type="submit" value="Main Menu"></form>
-			<form action="/summary" class="header--buttons"><input type="submit" value="Account Summary"></form>
-			<form action="/details" class="header--buttons"><input type="submit" value="Account Details"></form>
-			<form action="/addTransaction" class="header--buttons"><input type="submit" value="Add New Transaction"></form>
+			<form action="/index" class="headerform--buttons"><input type="submit" value="Main Menu" class="header--buttons"></form>
+			<form action="/summary" class="headerform--buttons"><input type="submit" value="Account Summary" class="header--buttons"></form>
+			<form action="/details" class="headerform--buttons"><input type="submit" value="Account Details" class="header--buttons"></form>
+			<form action="/editTransaction" class="headerform--buttons"><input type="submit" value="Add New Transaction" class="header--buttons"></form>
+			<form action="/logout" method="post" class="headerform--buttons"><input type="submit" value="Logout" class="header--buttons"></form>
 			</div>
 	</div>
-	 -->
-	<h1 class="page--title">Welcome <%= @name %>!</h1>
 
-	<p>Select an account to view or option below:</p>
-	<select onChange="window.location.href=this.value">
-		<option value="/" selected="selected">Main Menu</option>
-		<option value="/summary?name=<%=@name%>">Account Summary</option>
-		<option value="/details">Account Details</option>
-		<option value="/addTransaction">Add New Transaction</option>
-	</select>
 
-<p><form action="/logout" method="post"><input type="submit" value="Logout"></form></p>
+	<h1 class="welcome">Welcome <%= @name %>!</h1>
 
 </body>
 </html>

@@ -41,8 +41,8 @@ class AccountByTransaction
 	end
 
 #add a row to the accounts.csv file
-	def addRow(rowInfo)
-		rowInfoArray = rowInfo.values
+	def addRow(name,rowInfo)
+		rowInfoArray = [name] + rowInfo.values
 		csvrow = rowInfoArray.to_csv
 		@arrayOfTransactionsUser.push(csvrow)
 		@arrayOfTransactions.push(csvrow)

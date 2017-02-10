@@ -59,14 +59,16 @@ post("/removeTransaction") {
 
 
 post("/addTransaction") {
-	allAccounts.addRow(params)
+	name = session[:currentuser]
+	allAccounts.addRow(name,params)
 	session[:message] = "Transaction successfully added!"
 	redirect('/details')
 }
 
-get("/addTransaction") {
+get("/editTransaction") {
 	checkUsername(session[:currentuser])
-	erb :addTransaction
+	@transactions = allAccounts.returnTransactions(session[:currentuser])
+	erb :editTransaction
 }
 
 
