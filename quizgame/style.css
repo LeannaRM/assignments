@@ -1,0 +1,163 @@
+/*font-family: 'Slackey', cursive;
+font-family: 'Indie Flower', cursive;
+font-family: 'Roboto', sans-serif;*/
+/*#556270,#4ECDC4,#C7F464,#FF6B6B,#C44D58*/
+
+body {
+	font-family: 'Roboto', sans-serif;
+	font-color: #556270;
+	background-image: url("COLOURlovers.com-Pattern1.png");
+	background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.header--bar {
+    list-style-type: none;
+    margin: 0;
+    padding: 10px;
+    overflow: hidden;
+    background-color: #4ECDC4;
+}
+
+.header--item {
+    float: right;
+    display: block;
+    padding: 22px;
+    font-size: 18pt;
+}
+
+.header--firstitem {
+	float:left;
+	display: block;
+    font-size: 40pt;
+}
+
+.button--header {
+    display: block;
+    padding: 8px;
+    text-decoration: none;
+    color: #C44D58;
+}
+
+.gamename {
+    font-family: 'Slackey', cursive;
+}
+
+h2 {
+	text-align: center;
+}
+
+.startgamebutton--container {
+	text-align: center;
+}
+
+.start--container {
+	margin: 10px auto 0 auto;
+	width: 50%;
+	background-color:rgba(255,255,255,0.5);
+	padding: 5px 0 35px 0;
+}
+.newquestion--container {
+	border-style: solid;
+    border-width: 7px;
+    max-width: 50%;
+    /*margin: 0 auto;*/
+    padding: 20px 10px 60px 10px;
+    background-color:rgba(255,255,255,0.7);
+    border-color: #556270;
+    position: absolute;
+    top: 50%;
+    /*transform: translateY(-50%);*/
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.message--container {
+    max-width: 60%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+    background-color:rgba(255,255,255,0.5);
+    padding: 5px 5px 55px 5px;
+}
+
+
+
+.starttext {
+	font-family: 'Slackey', cursive;
+	font-size: 45pt;
+	color: #556270;
+
+}
+.currentquestion {
+	text-align: center;
+	font-size: 25pt;
+	color: #556270;
+
+}
+.messagetext {
+	text-align: center;
+	font-size: 35pt;
+	color: #556270;
+}
+
+
+.button {
+	text-decoration: none;
+	color: #556270;
+	border-style: solid;
+    border-width: 5px;
+    border-color: #556270;
+    font-family: 'Indie Flower', cursive;
+    border-radius: 3px;
+    background-color: #C7F464;
+    font-size: 20pt;
+}
+
+.button--startgame {
+    padding: 2px;
+}
+.button--submitanswer {
+    padding: 2px;
+}
+.button--nextquestion {
+    padding: 5px;
+
+}
+
+
+
+.answer--container {
+	text-align: center;
+}
+
+.textinputbox {
+	border: 5px solid #556270;
+    background-color: #C7F464;
+    color: #556270;
+    font-size: 20pt;
+    border-radius: 3px;
+    font-family: 'Indie Flower', cursive;
+}
+
+
+.score--container {
+	position:fixed;
+	bottom:0px;
+    text-align: center;
+    width: 100%;
+    padding-bottom: 50px;
+}
+
+.scoreboard {
+	display: inline-block;
+	background-color: #4ECDC4;
+	padding: 20px;
+	margin: -5px;
+	font-size: 25pt;
+	color: #C44D58;
+}
+

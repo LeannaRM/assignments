@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="scripts.js"></script>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link href="https://fonts.googleapis.com/css?family=Indie+Flower|Roboto:300|Slackey" rel="stylesheet">
+	<title></title>
+</head>
+<body>
+
+	<ul class="header--bar">
+	  <li class="header--firstitem"><a href="#" class="button--header gamename">Quiz Game</a></li>
+	  <li class="header--item"><a href="#" class="button--header newgamebutton">Play new game</a></li>
+	</ul>
+
+	<div class="start--container">
+		<h2 class="starttext">Ready to play?</h2>
+		<div class="startgamebutton--container">
+			<a href="#" class="button button--startgame">Start Game</a>
+		</div>
+	</div>
+
+	<div class="message--container" style="display:none">
+		<h2 class="messagetext"></h2>
+		<div class="nextquestions--container">
+			<a href="#" class="button button--nextquestion">Next Question</a>
+		</div>
+	</div>
+
+	<div class="newquestion--container" style="display:none">
+		<h2 class="currentquestion">Question number 0</h2>
+		<p class="currentquestion">How old are you?</p>
+		<div class="answer--container">
+			<form class="answer">
+				<input type="text" name="answer" class="textinputbox">
+				<input type="submit" class="button button--submitanswer">
+			</form>
+		</div>
+	</div>
+
+	<div class="score--container" style="display:none">
+		<p class="scoreboard">Correct answers: 0</p>
+		<p class="scoreboard">Questions asked: 0</p>
+	</div>
+
+</body>
+</html>
