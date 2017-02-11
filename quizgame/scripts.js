@@ -4,7 +4,15 @@ window.addEventListener("load", function (){
 	newgametrigger[0].addEventListener("click",reload);
 
 	function reload() {
-		location.reload()
+		var questionbox = document.getElementsByClassName("newquestion--container")[0]
+		questionbox.style.display = "none";
+		document.getElementsByClassName("score--container")[0].style.display = "none";
+		document.getElementsByClassName("message--container")[0].style.display = "none";
+		document.getElementsByClassName("start--container")[0].style.display = "block";
+		score = 0;
+		message = "";
+		questionnumber = 0;
+
 	}
 
 	var startgametrigger = document.getElementsByClassName("button--startgame");
@@ -15,6 +23,7 @@ window.addEventListener("load", function (){
 	var answertext = "";
 	var score = 0;
 	var message = "";
+	var usedquestions = [];
 
 	function showquestion(e){
 		// debugger;
@@ -31,11 +40,16 @@ window.addEventListener("load", function (){
 
 		//get question
 		// choose random question
-		var randomnumber = Math.random()*(questions.length);
-		var randomquestion = Math.round(randomnumber);
+		check = 0;
+		while (check != -1){
+			var randomnumber = Math.random()*(questions.length);
+			var randomquestion = Math.round(randomnumber);
+			check = usedquestions.indexOf(randomquestion);
+		}
 		questiontext = questions[randomquestion][0];
 		answertext = questions[randomquestion][1].replace(".","");
 
+		usedquestions.push(randomquestion);
 		//display choosen question
 		questionbox.children[1].textContent = questiontext;
 
@@ -81,12 +95,12 @@ window.addEventListener("load", function (){
 	nextquestiontrigger[0].addEventListener("click",showquestion);
 
 	var questions = [
-		["I’m tall when I’m young and I’m short when I’m old. What am I?", "A candle"],
+		["I'm tall when I'm young and I'm short when I'm old. What am I?", "A candle"],
 		["What has hands but can not clap?", "A clock"],
 		["What starts with the letter t, is filled with t and ends in t?", "A teapot"],
 		["You walk into a room with a match, a karosene lamp, a candle, and a fireplace. Which do you light first?", "The match"],
-		["What’s full of holes but still holds water?", "A Sponge"],
-		["My name is Ruger, I live on a farm. There are four other dogs on the farm with me. Their names are Snowy, Flash, Speedy and Brownie. What do you think the fifth dog’s name is?", "Ruger"],
+		["What's full of holes but still holds water?", "A Sponge"],
+		["My name is Ruger, I live on a farm. There are four other dogs on the farm with me. Their names are Snowy, Flash, Speedy and Brownie. What do you think the fifth dog's name is?", "Ruger"],
 		["I am an odd number. Take away one letter and I become even. What number am I?", "Seven"],
 		["What never asks questions but is often answered?","A doorbell"],
 		["What 5-letter word becomes shorter when you add two letters to it?","Short"],
