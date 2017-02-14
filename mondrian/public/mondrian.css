@@ -230,3 +230,32 @@ footer a:visited {
 #save_button {
   border-left: 13px solid #ff9933; 
 }
+
+.saveddata_container{
+  margin-left: 15px;
+  padding: 20px;
+  text-decoration: none;
+  background-color: rgba(0,0,0,0.1);
+  position: absolute;
+  top: 200px;
+  width:160px;
+}
+
+.saveddata {
+  font-family: Arial, sans-serif;
+  color: #5f5f5f;
+  letter-spacing: 2px;
+  font-size: 13px;
+  display: block;
+  padding: 0 0 6px 5px;
+  text-decoration: none;
+}
+
+.saveddata_title {
+  text-align: center;
+  color: #333;
+  padding: 0 0 15px 0;
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+  font-size: 20px;
+  text-shadow: -1px -1px 0 rgba(255,255,255,0.5), 1px 1px 0 rgba(0,0,0,0.5);
+}
