@@ -16,3 +16,13 @@ function makeQueryPOSTRequest(location,querystring) {
 	ourRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ourRequest.send(querystring);
 }
+
+function makeJSONGETRequest(location, onloadfunction) {
+	var ourRequest = new XMLHttpRequest();
+	ourRequest.open('GET', location)
+	ourRequest.onload = function(){
+		var ourdata = JSON.parse(ourRequest.responseText)
+		onloadfunction(ourdata);
+	}
+	ourRequest.send()
+}
