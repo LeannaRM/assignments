@@ -59,7 +59,10 @@ window.addEventListener("load", function (){
 		ourRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		ourRequest.send(querystring);
 
-		htmlstring = "<a href='#' class='saveddata'>" + n + "</a>"
+		date = n.substr(5,5)
+		time = n.substr(11,5)
+		htmlstring = "<a href='#' class='saveddata'>" + date + " at " + time + "</a>"
+
 		container = document.getElementsByClassName("saveddata_container")[0];
 		container.insertAdjacentHTML('beforeend',htmlstring)
 
