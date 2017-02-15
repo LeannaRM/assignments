@@ -4,7 +4,19 @@ window.addEventListener("load", function (e){
 	trigger.addEventListener("click",findwaldo);
 
 	function findwaldo(e){
-		
+		clickcoordinates = convertClickCoordinates(e);
+		querystring = "valueX=" + clickcoordinates[0] 
+					+ "&valueY=" + clickcoordinates[1] 
+					+ "&time=" + currenttimer.replace(/ /g, "");
+
+		makeQueryPOSTRequest('/check',querystring, function(result){
+			showresult(result);
+		});
+
+		e.preventDefault();
+	}
+
+	function convertClickCoordinates(e){
 		var currentwidth = e.target.offsetWidth;
 		var currentheight = e.target.offsetHeight;
 		var ratiowidth = currentwidth/1150;
@@ -12,41 +24,35 @@ window.addEventListener("load", function (e){
 
 		var clickX = e.offsetX/ratiowidth;
 		var clickY = e.offsetY/ratioheight;
-		querystring = "valueX=" + clickX + "&valueY=" + clickY + "&time=" + currenttimer.replace(/ /g, "");
-
-		var ourRequest = new XMLHttpRequest();
-		ourRequest.open('POST', '/check')
-		ourRequest.onload = function() {
-			var result = ourRequest.responseText
-			showresult(result);
-		}
-		ourRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		ourRequest.send(querystring);
-
-		e.preventDefault();
+		clickarray = [clickX,clickY];
+		return clickarray
 	}
 
 	function showresult(result) {
+		clearInterval(myVar);
 		var messagenode = document.getElementsByClassName("message")[0];
 		var messagetimer = document.getElementsByClassName("messagetime")[0];
+		var modal = document.getElementsByClassName("modal_container")[0];
+		var form = document.getElementsByTagName("form")[0];
+		modal.style.display = "block";
 		if (result == "false") {
 			messagenode.textContent = "Nope!";
 			messagetimer.textContent = "You've used " + currenttimer;
+			form.style.display = "none";
 		} else {
 			messagenode.textContent = "You found Waldo!";
 			messagetimer.textContent = "It took you " + currenttimer;
+			form.style.display = "block";
 		}
-		var modal = document.getElementsByClassName("modal_container")[0];
-		modal.style.display = "block";
 	}
 
 
-	var closetrigger = document.getElementsByClassName("modalclose")[0];
-	closetrigger.addEventListener("click",closemodal);
 
-	function closemodal() {
-		var modal = document.getElementsByClassName("modal_container")[0];
+	addClickListenerToClassEach("modalclose",closemodal);
+	function closemodal(e) {
+		var modal = e.target.parentElement.parentElement;
 		modal.style.display = "none";
+		myVar = setInterval(myTimer, 1000);
 	}
 
 
@@ -62,6 +68,38 @@ window.addEventListener("load", function (e){
 	    }
 	    currenttimer = timearray.join(" ");
 	    document.getElementsByClassName("timer")[0].textContent = currenttimer;
+	}
+
+	addClickListenerToClassEach("showtimes",showtimesmodal);
+	timesclicked = 0;
+	function showtimesmodal(){
+		clearInterval(myVar);
+		var modal = document.getElementsByClassName("besttimes_container")[0];
+		modal.style.display = "block";
+		if (timesclicked ==0) {
+			getsavedtimes();
+		}
+		timesclicked =+ 1;
+	}
+
+	function getsavedtimes() {
+		makeJSONGETRequest('/getsaved', function(data){
+			var length = Object.keys(data).length;
+			for (var i=0;i<length; i++) {
+				time = data[i]["time"]
+				name = data[i]["name"]
+				htmlstring = "<p>" + name + " " + time + "</p>"
+				container = document.getElementsByClassName("besttimes")[0];
+				container.insertAdjacentHTML('beforeend',htmlstring);
+			}
+		})
+	}
+
+	addClickListenerToClassEach("submitbutton",savetime);
+	function savetime(e) {
+		name = e.target.previousElementSibling.value
+		querystring = "name=" + name + "&time=" + currenttimer;
+		makeQueryPOSTRequest('/savetime',querystring);
 	}
 
 });

@@ -10,10 +10,6 @@ class CoordinatesCSV
 		if params["valueX"].to_f.between?(xcoord - (xcoord*0.02), xcoord + (xcoord*0.02))
 			if params["valueY"].to_f.between?(ycoord - (ycoord*0.1), ycoord + (ycoord*0.1))
 				guess = "true"
-				File.open('savedtimes.csv', 'a') do |file|
-					file << params["time"] + "\n"
-				end
-
 			else
 				guess = "false"
 			end
@@ -23,9 +19,25 @@ class CoordinatesCSV
 		return guess
 	end
 
+end
 
-	def save(params)
-		@boxcolorinfo = params
-		
+class SavedTimes
+
+	def savedtimesToJSON
+		datahash = {}
+		i=0
+		CSV.foreach("savedtimes.csv") do |row|
+			datahash[i] = {"time" => row[1], "name" => row[0]}
+			i+= 1
+		end
+		datajson = datahash.to_json
+		return datajson
 	end
+
+	def savetimestoCSV(params)
+		File.open('savedtimes.csv', 'a') do |file|
+					file << params["name"] + "," + params["time"] + "\n"
+		end
+	end
+
 end
