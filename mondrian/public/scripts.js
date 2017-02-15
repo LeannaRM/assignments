@@ -33,12 +33,12 @@ window.addEventListener("load", function (){
 		var d = new Date();
 		querystring = makeQueryString(d);
 		makeQueryPOSTRequest('/test',querystring);
-		printNewSavedToScreen(d);
-		makeTriggers();
+		printSavedToScreen(d);
+		addClickListenerToClassEach("saveddata",showSavedPainting);
 		e.preventDefault();
 	}
 
-	function printNewSavedToScreen(date) {
+	function printSavedToScreen(date) {
 		datestring = date.toDateString() + " at " + date.toTimeString().substr(0,5);
 		htmlstring = "<a href='#' class='saveddata' id= "+ date.getTime() +">"+datestring+"</a>";
 		container = document.getElementsByClassName("saveddata_container")[0];
@@ -61,43 +61,38 @@ window.addEventListener("load", function (){
 	}
 
 
+
+	
+	createSavedDataList();
+
+	function createSavedDataList() {
+		makeJSONGETRequest('/saveddata', function(data) {
+			createlist(data);
+			addClickListenerToClassEach("saveddata",showSavedPainting);
+		});
+	}
+
 	function createlist(data) {
 		i=0;
 		while (data[i] != undefined) {
 			var d = new Date();
 			d.setTime(data[i]["date"]);
-			printNewSavedToScreen(d);
+			printSavedToScreen(d);
 			i += 1
 		}
 	}
 
-	function createSavedDataList() {
-		makeJSONGETRequest('/saveddata', function(data) {
-			createlist(data);
-			makeTriggers();
-		});
-	}
-	
-	createSavedDataList();
 
-	function makeTriggers(){
-		var savedPaintingTrigger = document.getElementsByClassName("saveddata");
-		for (var i=0;i<savedPaintingTrigger.length;i++){
-			savedPaintingTrigger[i].addEventListener("click",showSavedPainting);
-		}
-	}
 
 	function showSavedPainting(e){
 		paintingDate = e.target.getAttribute('id');
-		var ourRequest = new XMLHttpRequest();
-		ourRequest.open('GET', '/saveddata')
-		ourRequest.onload = function() {
-			var ourdata = JSON.parse(ourRequest.responseText)
-			paintingNumber = findPaintingNumber(ourdata, paintingDate);
-			showPainting(ourdata[paintingNumber]);
-		}
-		ourRequest.send()
+
+		makeJSONGETRequest('/saveddata', function(data){
+			paintingNumber = findPaintingNumber(data, paintingDate);
+			showPainting(data[paintingNumber]);
+		})
 	}
+
 	function showPainting(data) {
 		boxes = document.getElementsByClassName("row")
 		for (var i=0;i<boxes.length;i++) {
