@@ -40,7 +40,7 @@ window.addEventListener("load", function (){
 
 	function printNewSavedToScreen(date) {
 		datestring = date.toDateString() + " at " + date.toTimeString().substr(0,5);
-		htmlstring = "<a href='#' class='saveddata'>"+datestring+"</a>";
+		htmlstring = "<a href='#' class='saveddata' id= "+ date.getTime() +">"+datestring+"</a>";
 		container = document.getElementsByClassName("saveddata_container")[0];
 		container.insertAdjacentHTML('beforeend',htmlstring);
 	}
@@ -82,28 +82,39 @@ window.addEventListener("load", function (){
 
 	function makeTriggers(){
 		var savedPaintingTrigger = document.getElementsByClassName("saveddata");
-		for (i=0;i<savedPaintingTrigger.length;i++){
+		for (var i=0;i<savedPaintingTrigger.length;i++){
 			savedPaintingTrigger[i].addEventListener("click",showSavedPainting);
 		}
 	}
 
 	function showSavedPainting(e){
-		numberPainting = e.target.getAttribute('id');
+		paintingDate = e.target.getAttribute('id');
 		var ourRequest = new XMLHttpRequest();
 		ourRequest.open('GET', '/saveddata')
 		ourRequest.onload = function() {
 			var ourdata = JSON.parse(ourRequest.responseText)
-			showPainting(ourdata[numberPainting]);
+			paintingNumber = findPaintingNumber(ourdata, paintingDate);
+			showPainting(ourdata[paintingNumber]);
 		}
 		ourRequest.send()
 	}
 	function showPainting(data) {
 		boxes = document.getElementsByClassName("row")
-		for (i=0;i<boxes.length;i++) {
+		for (var i=0;i<boxes.length;i++) {
 			id = boxes[i].getAttribute('id')
 			rgbcolor = colorhash[data[id]]
 			boxes[i].style.backgroundColor = rgbcolor
 		}
+	}
+
+	function findPaintingNumber(data, paintingDate) {
+		var rightone = false;
+		var i =0;
+		while (rightone == false) {
+			rightone = paintingDate == data[i]["date"];
+			i++
+		}
+		return i -1
 	}
 
 
