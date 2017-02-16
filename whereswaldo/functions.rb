@@ -24,13 +24,11 @@ end
 class SavedTimes
 
 	def savedtimesToJSON
-		datahash = {}
-		i=0
+		dataArray = []
 		CSV.foreach("savedtimes.csv") do |row|
-			datahash[i] = {"time" => row[1], "name" => row[0]}
-			i+= 1
+			dataArray.push({"time" => row[1], "name" => row[0]})
 		end
-		datajson = datahash.to_json
+		datajson = dataArray.to_json
 		return datajson
 	end
 

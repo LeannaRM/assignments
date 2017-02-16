@@ -84,8 +84,7 @@ window.addEventListener("load", function (e){
 
 	function getsavedtimes() {
 		makeJSONGETRequest('/getsaved', function(data){
-			var length = Object.keys(data).length;
-			for (var i=0;i<length; i++) {
+			for (var i=0;i<data.length; i++) {
 				time = data[i]["time"]
 				name = data[i]["name"]
 				htmlstring = "<p>" + name + " " + time + "</p>"
