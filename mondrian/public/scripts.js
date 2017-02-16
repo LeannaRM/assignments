@@ -73,8 +73,7 @@ window.addEventListener("load", function (){
 	}
 
 	function createlist(data) {
-		i=0;
-		while (data[i] != undefined) {
+		for (var i=0; i<data.length; i++) {
 			var d = new Date();
 			d.setTime(data[i]["date"]);
 			printSavedToScreen(d);
