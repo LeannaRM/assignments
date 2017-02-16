@@ -98,7 +98,8 @@ window.addEventListener("load", function (e){
 	addClickListenerToClassEach("submitbutton",savetime);
 	function savetime(e) {
 		name = e.target.previousElementSibling.value
-		querystring = "name=" + name + "&time=" + currenttimer;
+		time = currenttimer.replace(/ /g, "");
+		querystring = "name=" + name + "&time=" + time;
 		makeQueryPOSTRequest('/savetime',querystring);
 	}
 
